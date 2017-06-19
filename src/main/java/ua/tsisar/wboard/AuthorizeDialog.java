@@ -13,7 +13,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 
-public class AuthenticateDialog extends DialogFragment {
+public class AuthorizeDialog extends DialogFragment {
 
     private EditText usernameEditText;
     private EditText passwordEditText;
