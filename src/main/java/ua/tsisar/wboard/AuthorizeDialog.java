@@ -44,14 +44,14 @@ public class AuthorizeDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_authenticate, null);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_authorize, null);
         usernameEditText = (EditText) view.findViewById(R.id.username_edittext);
         passwordEditText = (EditText) view.findViewById(R.id.password_edittext);
         rememberMeCheckBox = (CheckBox) view.findViewById(R.id.rememberme_checkbox);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setTitle("Authorize")
+                .setTitle("Sign in")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Continue", null);
 
@@ -105,7 +105,9 @@ public class AuthorizeDialog extends DialogFragment {
 
             @Override
             public void onFailure(Call<Token> call, Throwable throwable) {
-
+                Toast.makeText(getActivity(), "Error: " + throwable.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onFailure: " + throwable.getMessage());
             }
         });
     }

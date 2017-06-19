@@ -17,6 +17,8 @@ public class Token {
         return "Bearer " + idToken;
     }
 
+    public void resetToken(){idToken = null;}
+
     public void setIdToken(String idToken) {
         this.idToken = idToken;
     }

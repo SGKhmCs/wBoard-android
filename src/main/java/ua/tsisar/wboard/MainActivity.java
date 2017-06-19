@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements AuthorizeDialog.I
     private final String TAG = "myLogs";
     private final String TOKEN = "token";
 
+    private boolean isAuthenticated = false;
     private TextView textView;
 
     @Override
@@ -42,10 +43,22 @@ public class MainActivity extends AppCompatActivity implements AuthorizeDialog.I
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.setGroupVisible(R.id.menu_not_authorize, !isAuthenticated);
+        menu.setGroupVisible(R.id.menu_authorize, isAuthenticated);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_authorize:
+            case R.id.menu_sign_in:
                 showAuthorizeDialog();
+                return true;
+            case R.id.menu_register:
+                return true;
+            case R.id.menu_sign_out:
+                singOut();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -64,6 +77,13 @@ public class MainActivity extends AppCompatActivity implements AuthorizeDialog.I
         if(rememberMe){
             saveIdToken(App.getToken().getIdToken());
         }
+        isAuthenticated();
+    }
+
+    private void singOut(){
+        isAuthenticated = false;
+        App.getToken().resetToken();
+        saveIdToken("");
     }
 
     private void isAuthenticated(){
@@ -71,20 +91,30 @@ public class MainActivity extends AppCompatActivity implements AuthorizeDialog.I
         stringCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                //-----------------------TEST------------------------//
-                String login = response.body();
-                Log.d(TAG, "Login: " + login);
-                textView.setText("Hi " + login + "!");
-                //---------------------------------------------------//
+                switch (response.code()){
+                    case 200:
+                        if(response.body().isEmpty()) {
+                            isAuthenticated = false;
+                        } else {
+                            isAuthenticated = true;
+                            textView.setText("Hi " + response.body() + "!");
+                            Log.d(TAG, "Login: " + response.body());
+                        }
+                        break;
+                    default:
+                        isAuthenticated = false;
+                        break;
+                }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable throwable) {
-
+                isAuthenticated = false;
             }
         });
 
     }
+
     private void saveIdToken(String idToken) {
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
