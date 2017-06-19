@@ -10,8 +10,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,47 +53,52 @@ public class AuthorizeDialog extends DialogFragment {
                 .setView(view)
                 .setTitle("Authorize")
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        authorize(
-                                usernameEditText.getText().toString(),
-                                passwordEditText.getText().toString(),
-                                rememberMeCheckBox.isChecked()
-                        );
-                    }
-                });
+                .setPositiveButton("Continue", null);
+
         return builder.create();
     }
 
-    private void authorize(String stringUsername,
-                           String stringPassword, boolean booleanRememberMe){
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        final AlertDialog alertDialog = (AlertDialog)getDialog();
+        if(alertDialog != null)
+        {
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    authorize(alertDialog);
+                }
+            });
+        }
+    }
+
+    private void authorize(final AlertDialog alertDialog){
         Authorize authorize = new Authorize();
-        authorize.setUsername(stringUsername);
-        authorize.setPassword(stringPassword);
-        authorize.setRememberMe(booleanRememberMe);
+        authorize.setUsername(usernameEditText.getText().toString());
+        authorize.setPassword(passwordEditText.getText().toString());
+        authorize.setRememberMe( rememberMeCheckBox.isChecked());
 
         Call<Token> tokenCall = App.getApi().authorize(authorize);
         tokenCall.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
-                Log.d(TAG, "Response: " + response.isSuccessful() + ", code: " + response.code());
+                Log.d(TAG, "Response: " + response.isSuccessful() + ", code: " + response.code() +
+                ", message: " + response.message());
                 switch (response.code()){
                     case 200:
                         App.setIdToken(response.body().getIdToken());
                         if (listener != null) {
                             listener.onAuthorized(rememberMeCheckBox.isChecked());
                         }
-                        break;
-                    case 201:
-                        break;
-                    case 401:
-                        break;
-                    case 403:
-                        break;
-                    case 404:
+                        alertDialog.dismiss();
                         break;
                     default:
+                        Toast.makeText(getActivity(), "Status Code: " + response.code() + " - " +
+                                response.message(), Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
