@@ -26,4 +26,7 @@ public interface ApiInterface {
     @Headers("Accept: text/plain")
     @GET("authenticate")
     Call<String> isAuthenticated(@Header("Authorization") String authorization);
+
+    @POST("register")
+    Call<String> registerAccount(@Body User user);
 }

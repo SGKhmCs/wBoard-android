@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements AuthorizeDialog.I
                 showAuthorizeDialog();
                 return true;
             case R.id.menu_register:
+                showRegistrationDialog();
                 return true;
             case R.id.menu_sign_out:
                 singOut();
@@ -70,6 +71,14 @@ public class MainActivity extends AppCompatActivity implements AuthorizeDialog.I
         dialog.setArguments(arguments);
 
         dialog.show(getSupportFragmentManager(), "authenticateDialog");
+    }
+
+    private void showRegistrationDialog() {
+        RegistrationDialog dialog = new RegistrationDialog();
+        Bundle arguments = new Bundle();
+        dialog.setArguments(arguments);
+
+        dialog.show(getSupportFragmentManager(), "registrationDialog");
     }
 
     @Override
