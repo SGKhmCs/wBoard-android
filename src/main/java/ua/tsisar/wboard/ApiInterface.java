@@ -14,7 +14,7 @@ import retrofit2.http.Query;
  */
 
 public interface ApiInterface {
-    String URL_BASE = "http://192.168.38.105:8080/api/";
+    String URL_BASE = "http://192.168.20.102:8080/api/";
 
     @Headers({
             "Content-Type: application/json",

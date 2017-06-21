@@ -97,16 +97,14 @@ public class AuthorizeDialog extends DialogFragment {
                         alertDialog.dismiss();
                         break;
                     default:
-                        Toast.makeText(getActivity(), "Status Code: " + response.code() + " - " +
-                                response.message(), Toast.LENGTH_SHORT).show();
+                        Message.makeText(getActivity(), "Error", response.message() + ", status code: " + response.code()).show();
                         break;
                 }
             }
 
             @Override
             public void onFailure(Call<Token> call, Throwable throwable) {
-                Toast.makeText(getActivity(), "Error: " + throwable.getMessage(),
-                        Toast.LENGTH_SHORT).show();
+                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
                 Log.d(TAG, "onFailure: " + throwable.getMessage());
             }
         });
