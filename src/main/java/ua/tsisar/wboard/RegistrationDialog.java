@@ -7,12 +7,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,22 +29,8 @@ public class RegistrationDialog extends DialogFragment {
     private EditText emailEditText;
     private EditText passwordEditText;
     private EditText passwordComfEditText;
-    private ProgressBar strengthProgressBar;
-    private IAuthorizeDialogListener listener;
 
     private final String TAG = "myLogs";
-
-    public interface IAuthorizeDialogListener {
-        void onRegistration(boolean rememberMe);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (getActivity() instanceof IAuthorizeDialogListener) {
-            listener = (IAuthorizeDialogListener) getActivity();
-        }
-    }
 
     @NonNull
     @Override
@@ -51,7 +41,6 @@ public class RegistrationDialog extends DialogFragment {
         passwordEditText = (EditText) view.findViewById(R.id.password_edittext);
         passwordComfEditText = (EditText) view.findViewById(R.id.password_comf_edittext);
 
-        strengthProgressBar = (ProgressBar) view.findViewById(R.id.strength_progressBar);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)
@@ -80,11 +69,38 @@ public class RegistrationDialog extends DialogFragment {
         }
     }
 
-    private void register(final AlertDialog alertDialog){
+    private void register(final AlertDialog alertDialog) {
+        String login = usernameEditText.getText().toString();
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+
         User user = new User();
-        user.setLogin("userf");
-        user.setEmail("userf@gmail.com");
-        user.setPassword("userF");
+
+        user.setLogin(login);
+
+        if(isValidEmail(email)){
+            user.setEmail(email);
+        }else{
+            Message.makeText(getActivity(), "Error", "Please enter valid email!").show();
+            return;
+        }
+
+        if (password.length() > 7) {
+            if (password.equals(passwordComfEditText.getText().toString())) {
+                if (isValidPassword(password)) {
+                    user.setPassword(password);
+                } else {
+                    Message.makeText(getActivity(), "Error", "Your password is unreliable!").show();
+                    return;
+                }
+            } else {
+                Message.makeText(getActivity(), "Error", "Your passwords do not match!").show();
+                return;
+            }
+        } else {
+            Message.makeText(getActivity(), "Error", "Your password too short!").show();
+            return;
+        }
 
         Call<String> stringCall = App.getApi().registerAccount(user);
         stringCall.enqueue(new Callback<String>() {
@@ -95,11 +111,13 @@ public class RegistrationDialog extends DialogFragment {
 
                 switch (response.code()){
                     case 201:
-                        Message.makeText(getActivity(), "Registration saved!", "Please check your email for confirmation.").show();
+                        Message.makeText(getActivity(), "Registration saved!",
+                                "Please check your email for confirmation.").show();
                         alertDialog.dismiss();
                         break;
                     default:
-                        Message.makeText(getActivity(), "Error", response.message() + ", status code: " + response.code()).show();
+                        Message.makeText(getActivity(), "Error",
+                                response.message() + ", status code: " + response.code()).show();
                         break;
                 }
             }
@@ -110,5 +128,25 @@ public class RegistrationDialog extends DialogFragment {
                 Log.d(TAG, "onFailure: " + throwable.getMessage());
             }
         });
+    }
+
+    private static boolean isValidPassword(String password) {
+
+        Pattern pattern;
+        Matcher matcher;
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{4,}$";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+
+        return matcher.matches();
+
+    }
+
+    private static boolean isValidEmail(String email) {
+        if (TextUtils.isEmpty(email)) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        }
     }
 }

@@ -9,10 +9,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 
-/**
- * Created by pavel on 16.06.17.
- */
-
 public interface ApiInterface {
     String URL_BASE = "http://192.168.20.102:8080/api/";
 
