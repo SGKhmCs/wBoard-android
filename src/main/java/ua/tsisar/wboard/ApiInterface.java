@@ -10,7 +10,7 @@ import retrofit2.http.Query;
 
 
 public interface ApiInterface {
-    String URL_BASE = "http://192.168.20.102:8080/api/";
+    String URL_BASE = "http://192.168.38.105:8080/api/";
 
     @Headers({
             "Content-Type: application/json",
@@ -23,6 +23,21 @@ public interface ApiInterface {
     @GET("authenticate")
     Call<String> isAuthenticated(@Header("Authorization") String authorization);
 
+    @Headers({
+            "Content-Type: application/json",
+            "Accept: application/json"
+    })
     @POST("register")
-    Call<String> registerAccount(@Body User user);
+    Call<String> registerAccount(@Body User userEx);
+
+    @Headers("Content-Type: application/json")
+    @GET("account")
+    Call<User> getAccount(@Header("Authorization") String authorization);
+
+    @Headers({
+            "Content-Type: application/json",
+            "Accept: */*"
+    })
+    @POST("account")
+    Call<String> saveAccount(@Header("Authorization") String authorization, @Body User user);
 }

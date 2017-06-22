@@ -41,7 +41,6 @@ public class RegistrationDialog extends DialogFragment {
         passwordEditText = (EditText) view.findViewById(R.id.password_edittext);
         passwordComfEditText = (EditText) view.findViewById(R.id.password_comf_edittext);
 
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle("Registration")

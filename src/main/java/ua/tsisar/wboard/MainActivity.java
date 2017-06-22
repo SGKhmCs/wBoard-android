@@ -1,5 +1,6 @@
 package ua.tsisar.wboard;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -60,6 +61,10 @@ public class MainActivity extends AppCompatActivity implements AuthorizeDialog.I
                 return true;
             case R.id.menu_sign_out:
                 singOut();
+                return true;
+            case R.id.menu_settings:
+                Intent intent = new Intent(this, UserSettings.class);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
