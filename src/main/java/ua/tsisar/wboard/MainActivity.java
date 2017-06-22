@@ -66,25 +66,28 @@ public class MainActivity extends AppCompatActivity implements AuthorizeDialog.I
                 Intent intent = new Intent(this, UserSettings.class);
                 startActivity(intent);
                 return true;
+            case R.id.menu_password:
+                showPasswordDialog();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void showAuthorizeDialog() {
         AuthorizeDialog dialog = new AuthorizeDialog();
-        Bundle arguments = new Bundle();
-        dialog.setArguments(arguments);
-
         dialog.show(getSupportFragmentManager(), "authenticateDialog");
     }
 
     private void showRegistrationDialog() {
         RegistrationDialog dialog = new RegistrationDialog();
-        Bundle arguments = new Bundle();
-        dialog.setArguments(arguments);
-
         dialog.show(getSupportFragmentManager(), "registrationDialog");
     }
+
+    private void showPasswordDialog() {
+        PasswordDialog dialog = new PasswordDialog();
+        dialog.show(getSupportFragmentManager(), "passwordDialog");
+    }
+
 
     @Override
     public void onAuthorized(boolean rememberMe) {

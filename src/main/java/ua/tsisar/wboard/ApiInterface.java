@@ -6,7 +6,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 
 
 public interface ApiInterface {
@@ -40,4 +39,11 @@ public interface ApiInterface {
     })
     @POST("account")
     Call<String> saveAccount(@Header("Authorization") String authorization, @Body User user);
+
+    @Headers({
+            "Content-Type: application/json",
+            "Accept: text/plain"
+    })
+    @POST("account/change_password")
+    Call<String> changePassword(@Header("Authorization") String authorization, @Body String string);
 }
