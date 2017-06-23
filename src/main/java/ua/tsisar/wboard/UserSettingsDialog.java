@@ -1,37 +1,61 @@
 package ua.tsisar.wboard;
 
-import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserSettings extends AppCompatActivity {
+public class UserSettingsDialog extends DialogFragment {
     private User user;
-    private Activity activity = this;
 
     private EditText firstName;
     private EditText lastName;
     private EditText email;
 
+    @NonNull
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_settings);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_user_settings, null);
 
-        firstName = (EditText) findViewById(R.id.firstName_editText);
-        lastName = (EditText) findViewById(R.id.lastName_editText);
-        email = (EditText) findViewById(R.id.email_user_settings_editText);
+        firstName = (EditText) view.findViewById(R.id.firstName_editText);
+        lastName = (EditText) view.findViewById(R.id.lastName_editText);
+        email = (EditText) view.findViewById(R.id.email_user_settings_editText);
 
         getAccount();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setView(view)
+                .setTitle("User") // Login?
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("Save", null);
+
+        return builder.create();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        final AlertDialog alertDialog = (AlertDialog)getDialog();
+        if(alertDialog != null)
+        {
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    saveAccount(alertDialog);
+                }
+            });
+        }
     }
 
     private void getAccount(){
@@ -44,7 +68,7 @@ public class UserSettings extends AppCompatActivity {
                         setValue(response.body());
                         break;
                     default:
-                        Message.makeText(activity, "Error",
+                        Message.makeText(getActivity(), "Error",
                                 response.message() + ", status code: " + response.code()).show();
                         break;
                 }
@@ -52,19 +76,19 @@ public class UserSettings extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable throwable) {
-                Message.makeText(activity, "Error", throwable.getMessage()).show();
+                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
             }
         });
     }
 
-    public void saveAccount(View view){
+    public void saveAccount(final AlertDialog alertDialog){
         user.setFirstName(firstName.getText().toString());
         user.setLastName(lastName.getText().toString());
 
         if(isValidEmail(email.getText().toString())){
             user.setEmail(email.getText().toString());
         }else{
-            Message.makeText(activity, "Error", "Please enter valid email!").show();
+            Message.makeText(getActivity(), "Error", "Please enter valid email!").show();
             return;
         }
 
@@ -74,13 +98,13 @@ public class UserSettings extends AppCompatActivity {
             public void onResponse(Call<String> call, Response<String> response) {
                 switch (response.code()){
                     case 200:
-                        Message.makeText(activity, "Saved!",
+                        Message.makeText(getActivity(), "Saved!",
                                 "Your settings saved.").show();
                         // Don't finish?
-                        finish();
+                        alertDialog.dismiss();
                         break;
                     default:
-                        Message.makeText(activity, "Error",
+                        Message.makeText(getActivity(), "Error",
                                 response.message() + ", status code: " + response.code()).show();
                         break;
                 }
@@ -88,7 +112,7 @@ public class UserSettings extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<String> call, Throwable throwable) {
-                Message.makeText(activity, "Error", throwable.getMessage()).show();
+                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
             }
         });
     }

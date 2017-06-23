@@ -63,8 +63,7 @@ public class MainActivity extends AppCompatActivity implements AuthorizeDialog.I
                 singOut();
                 return true;
             case R.id.menu_settings:
-                Intent intent = new Intent(this, UserSettings.class);
-                startActivity(intent);
+               showUserSettingsDialog();
                 return true;
             case R.id.menu_password:
                 showPasswordDialog();
@@ -85,9 +84,13 @@ public class MainActivity extends AppCompatActivity implements AuthorizeDialog.I
 
     private void showPasswordDialog() {
         PasswordDialog dialog = new PasswordDialog();
-        dialog.show(getSupportFragmentManager(), "passwordDialog");
+        dialog.show(getSupportFragmentManager(), "passswordDialog");
     }
 
+    private void showUserSettingsDialog(){
+        UserSettingsDialog dialog = new UserSettingsDialog();
+        dialog.show(getSupportFragmentManager(), "userSettingsDialog");
+    }
 
     @Override
     public void onAuthorized(boolean rememberMe) {
