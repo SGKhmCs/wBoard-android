@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="First Name:" />
+            android:text="First Name" />
 
         <EditText
             android:id="@+id/firstName_editText"
@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Last Name:" />
+            android:text="Last Name" />
 
         <EditText
             android:id="@+id/lastName_editText"

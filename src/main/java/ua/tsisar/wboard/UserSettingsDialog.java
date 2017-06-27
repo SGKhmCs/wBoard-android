@@ -33,7 +33,7 @@ public class UserSettingsDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setTitle("User") // Login?
+                .setTitle("User settings") // Login?
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Save", null);
 

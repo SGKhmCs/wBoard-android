@@ -10,7 +10,7 @@ import android.util.Log;
  * Created by pavel on 21.06.17.
  */
 
-public class Message {
+public class Message{
     private static final String TAG = "myLogs";
     private final Context context;
     private static MessageDialog dialog;
@@ -19,15 +19,32 @@ public class Message {
         this.context = context;
     }
 
-    public static Message makeText(Context context, String stringTitle, String stringMessage){
-        Message message = new Message(context);
+    private AppCompatActivity getActivity() {
+        return (AppCompatActivity) context;
+    }
 
+    private FragmentManager getSupportFragmentManager() {
+        try{
+            return getActivity().getSupportFragmentManager();
+        } catch (ClassCastException e) {
+            Log.d(TAG, "Can't get the fragment manager with this");
+        }
+        return null;
+    }
+
+
+    private static void makeText(String stringTitle, String stringMessage){
         dialog = new MessageDialog();
         Bundle arguments = new Bundle();
         arguments.putString("title", stringTitle);
         arguments.putString("message", stringMessage);
         dialog.setArguments(arguments);
 
+    }
+
+    public static Message makeText(Context context, String stringTitle, String stringMessage){
+        Message message = new Message(context);
+        makeText(stringTitle, stringMessage);
         return message;
     }
 
@@ -42,16 +59,5 @@ public class Message {
 
     public void hide(){
         dialog.dismiss();
-    }
-
-    private FragmentManager getSupportFragmentManager() {
-        try{
-            final AppCompatActivity activity = (AppCompatActivity) context;
-            return activity.getSupportFragmentManager();
-
-        } catch (ClassCastException e) {
-            Log.d(TAG, "Can't get the fragment manager with this");
-        }
-        return null;
     }
 }
