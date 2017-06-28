@@ -9,5 +9,4 @@
     tools:context="ua.tsisar.wboard.MainActivity"
     tools:showIn="@layout/activity_main">
 
-
 </RelativeLayout>

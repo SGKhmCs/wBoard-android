@@ -1,12 +1,15 @@
 package ua.tsisar.wboard;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -31,6 +34,10 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerUIUtils;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,10 +48,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
-    private Activity activity = this;
     private Toolbar toolbar;
+    private Drawer drawer;
+
+    public Context getActivity() {
+        return this;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +65,31 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //TODO не завантажує картинку з нету
+        DrawerImageLoader.init(new AbstractDrawerImageLoader() {
+            @Override
+            public void set(ImageView imageView, Uri uri, Drawable placeholder) {
+                Picasso.with(imageView.getContext()).load(uri).placeholder(placeholder).into(imageView);
+            }
+
+            @Override
+            public void cancel(ImageView imageView) {
+                Picasso.with(imageView.getContext()).cancelRequest(imageView);
+            }
+
+        });
+
         getUser();
     }
 
     @Override
     public void onBackPressed() {
-        DialogFragment dlg_exit = new DialogSignOut();
-        dlg_exit.show(getSupportFragmentManager(), "signOut");
+        if(drawer != null && drawer.isDrawerOpen()){
+            drawer.closeDrawer();
+        }else {
+            DialogFragment dlg_exit = new DialogSignOut();
+            dlg_exit.show(getSupportFragmentManager(), "signOut");
+        }
     }
 
 
@@ -71,10 +100,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 switch (response.code()){
                     case 200:
-                        buildDrawer(response.body());
+                        drawer = buildDrawer(response.body());
                         break;
                     default:
-                        Message.makeText(activity, "Error",
+                        Message.makeText(getActivity(), "Error",
                                 response.message() + ", status code: " + response.code()).show();
                         break;
                 }
@@ -82,120 +111,90 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable throwable) {
-                Message.makeText(activity, "Error", throwable.getMessage()).show();
+                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
             }
         });
     }
 
     private Drawer buildDrawer(User user){
         //if you want to update the items at a later time it is recommended to keep it in a variable
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem()
+        PrimaryDrawerItem itemCreateBoard = new PrimaryDrawerItem()
                 .withIdentifier(1)
-                .withName("Home")
-                .withIcon(GoogleMaterial.Icon.gmd_wb_sunny);
+                .withName("Create board")
+                .withIcon(GoogleMaterial.Icon.gmd_developer_board);
 
-        SecondaryDrawerItem item2 = new SecondaryDrawerItem()
+        PrimaryDrawerItem itemMyBoards = new PrimaryDrawerItem()
                 .withIdentifier(2)
-                .withName("Sett")
-                .withIcon(
-                        new IconicsDrawable(this)
-                                .icon(GoogleMaterial.Icon.gmd_3d_rotation)
-                                .color(Color.RED)
-                                .sizeDp(24)
-                );
+                .withName("My boards")
+                .withIcon(GoogleMaterial.Icon.gmd_list);
+
+        PrimaryDrawerItem itemUsers = new PrimaryDrawerItem()
+                .withIdentifier(3)
+                .withName("Users")
+                .withIcon(GoogleMaterial.Icon.gmd_account_box);
+
+        SecondaryDrawerItem itemSignOut = new SecondaryDrawerItem()
+                .withIdentifier(4)
+                .withName("Sign out")
+                .withIcon(GoogleMaterial.Icon.gmd_exit_to_app);
 
         //create the drawer and remember the `Drawer` result object
-        Drawer result = new DrawerBuilder()
+        return new DrawerBuilder()
                 .withAccountHeader(getAccount(user))
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .addDrawerItems(
-                        item1,
+                        itemCreateBoard,
+                        itemMyBoards,
+                        itemUsers,
                         new DividerDrawerItem(),
-                        item2,
-                        new SecondaryDrawerItem().withName("SecondaryDrawerItem")
+                        itemSignOut
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         // do something with the clicked item :D
-                        int id = position;
+                        switch (position) {
+                            case 5:
+                                finish();
+                                break;
+                        }
                         return true;
                     }
                 })
                 .build();
-        return result;
     }
 
     private AccountHeader getAccount(User user){
         // Create the AccountHeader
         String name = "";
         String email = "";
-        Drawable icon = null;
+        String icon = "";
 
         if(user != null) {
             name = user.getFirstName() + " " + user.getLastName();
             email = user.getEmail();
-            icon = getIcon(user.getImageUrl());
+            icon = user.getImageUrl();
         }
 
-        AccountHeader headerResult = new AccountHeaderBuilder()
+        ProfileDrawerItem profileDrawerItem = new ProfileDrawerItem()
+                .withName(name)
+                .withEmail(email)
+                .withIcon(icon);
+
+        return new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.background_blue)
-                .addProfiles(
-                        new ProfileDrawerItem()
-                                .withName(name)
-                                .withEmail(email)
-                                .withIcon(icon)
-                )
+                .addProfiles(profileDrawerItem)
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        Intent intent = new Intent(getActivity(), UserSettingsActivity.class);
+                        startActivity(intent);
                         return false;
                     }
                 })
                 .build();
-        return headerResult;
     }
 
-    private Drawable getIcon(String url){
-        Drawable icon = drawableFromUrl(url);
-
-        if(icon == null){
-            icon = new IconicsDrawable(this)
-                    .icon(GoogleMaterial.Icon.gmd_account_circle)
-                    .color(Color.GRAY)
-                    .sizeDp(64);
-        }
-        return icon;
-    }
-
-    private Drawable drawableFromUrl(String url){
-        return null;
-    }
-
-//    private class drawableFromUrl extends AsyncTask<String, Void, Bitmap> {
-//        Drawable icon;
-//
-//        public drawableFromUrl(Drawable icon){
-//            this.icon = icon;
-//        }
-//
-//        protected Bitmap doInBackground(String... urls) {
-//            String urldisplay = urls[0];
-//            Bitmap mIcon11 = null;
-//            try {
-//                InputStream in = new java.net.URL(urldisplay).openStream();
-//                mIcon11 = BitmapFactory.decodeStream(in);
-//            } catch (Exception e) {
-//                Log.e("Error", e.getMessage());
-//                e.printStackTrace();
-//            }
-//            return mIcon11;
-//        }
-//
-//        protected void onPostExecute(Bitmap bitmap) {
-//            icon = new BitmapDrawable(getResources(), bitmap);
-//        }
-//    }
 }

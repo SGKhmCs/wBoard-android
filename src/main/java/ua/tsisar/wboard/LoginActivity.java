@@ -1,6 +1,7 @@
 package ua.tsisar.wboard;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -19,13 +20,15 @@ public class LoginActivity extends AppCompatActivity {
     private final int REQUEST_CODE_MAIN = 1;
 
     private final String TOKEN = "token";
-    private final Activity activity = this;
 
     private EditText userName;
     private EditText password;
     private CheckBox rememberMe;
 
-    //TODO щось зробити з показом форми авторизації
+    public Context getActivity() {
+        return this;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,12 +62,12 @@ public class LoginActivity extends AppCompatActivity {
                     case 200:
                         if(!response.body().isEmpty()) {
                             // Переходимо до актівіті борда
-                            Intent intent = new Intent(activity, MainActivity.class);
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
                             startActivityForResult(intent, REQUEST_CODE_MAIN);
                         }
                         break;
                     default:
-                        Message.makeText(activity, "Error",
+                        Message.makeText(getActivity(), "Error",
                                 response.message() + ", status code: " + response.code()).show();
                         break;
                 }
@@ -72,13 +75,13 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<String> call, Throwable throwable) {
-                Message.makeText(activity, "Error", throwable.getMessage()).show();
+                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
             }
         });
     }
 
     public void register(View view){
-        Intent intent = new Intent(activity, RegistrationActivity.class);
+        Intent intent = new Intent(getActivity(), RegistrationActivity.class);
         startActivity(intent);
     }
 
@@ -104,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                         isAuthenticated();
                         break;
                     default:
-                        Message.makeText(activity, "Error",
+                        Message.makeText(getActivity(), "Error",
                                 response.message() + ", status code: " + response.code()).show();
                         break;
                 }
@@ -112,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Token> call, Throwable throwable) {
-                Message.makeText(activity, "Error", throwable.getMessage()).show();
+                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
             }
         });
     }
