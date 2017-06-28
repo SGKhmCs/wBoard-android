@@ -16,7 +16,7 @@ public interface ApiInterface {
             "Accept: application/json"
     })
     @POST("authenticate")
-    Call<Token> authorize(@Body Authorize authorize);
+    Call<Token> authorize(@Body AuthorizeDTO authorizeDTO);
 
     @Headers("Accept: text/plain")
     @GET("authenticate")
@@ -27,18 +27,18 @@ public interface ApiInterface {
             "Accept: application/json"
     })
     @POST("register")
-    Call<String> registerAccount(@Body User userEx);
+    Call<String> registerAccount(@Body UserDTO userDTO);
 
     @Headers("Content-Type: application/json")
     @GET("account")
-    Call<User> getAccount(@Header("Authorization") String authorization);
+    Call<UserDTO> getAccount(@Header("Authorization") String authorization);
 
     @Headers({
             "Content-Type: application/json",
             "Accept: */*"
     })
     @POST("account")
-    Call<String> saveAccount(@Header("Authorization") String authorization, @Body User user);
+    Call<String> saveAccount(@Header("Authorization") String authorization, @Body UserDTO userDTO);
 
     @Headers({
             "Content-Type: application/json",

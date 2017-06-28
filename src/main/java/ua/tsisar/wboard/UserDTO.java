@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class User {
+public class UserDTO {
 
     @SerializedName("activated")
     @Expose

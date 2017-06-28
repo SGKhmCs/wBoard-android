@@ -3,7 +3,7 @@ package ua.tsisar.wboard;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Authorize {
+public class AuthorizeDTO {
 
     @SerializedName("password")
     @Expose
@@ -14,6 +14,15 @@ public class Authorize {
     @SerializedName("username")
     @Expose
     private String username;
+
+    public AuthorizeDTO(String username, String password, Boolean rememberMe){
+        this.username = username;
+        this.password = password;
+        this.rememberMe = rememberMe;
+    }
+
+    public AuthorizeDTO(){
+    }
 
     public String getPassword() {
         return password;

@@ -1,6 +1,5 @@
 package ua.tsisar.wboard;
 
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,11 +9,8 @@ import android.widget.EditText;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class RegistrationActivity extends AppCompatActivity implements MessageDialog.IMessageDialogListener{
+public class RegistrationActivity extends AppCompatActivity
+        implements MessageDialog.IMessageDialogListener, RegisterService.RegisterListener{
 
     private EditText username;
     private EditText email;
@@ -23,12 +19,14 @@ public class RegistrationActivity extends AppCompatActivity implements MessageDi
 
     private int responseCode;
 
-    private final Activity activity = this;
+    private RegisterService registerService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        registerService = new RegisterService(this);
 
         username = (EditText) findViewById(R.id.userName_editText);
         email = (EditText) findViewById(R.id.email_editText);
@@ -41,12 +39,12 @@ public class RegistrationActivity extends AppCompatActivity implements MessageDi
         String stringEmail = email.getText().toString();
         String stringPassword = password.getText().toString();
 
-        User user = new User();
+        UserDTO userDTO = new UserDTO();
 
-        user.setLogin(stringUsername);
+        userDTO.setLogin(stringUsername);
 
         if(isValidEmail(stringEmail)){
-            user.setEmail(stringEmail);
+            userDTO.setEmail(stringEmail);
         }else{
             Message.makeText(this, "Error", "Please enter valid email!").show();
             return;
@@ -55,7 +53,7 @@ public class RegistrationActivity extends AppCompatActivity implements MessageDi
         if (stringPassword.length() > 3) {
             if (stringPassword.equals(passwordConfirmation.getText().toString())) {
                 if (isValidPassword(stringPassword)) {
-                    user.setPassword(stringPassword);
+                    userDTO.setPassword(stringPassword);
                 } else {
                     Message.makeText(this, "Error", "Your password is unreliable!").show();
                     return;
@@ -69,28 +67,7 @@ public class RegistrationActivity extends AppCompatActivity implements MessageDi
             return;
         }
 
-        Call<String> stringCall = App.getApi().registerAccount(user);
-        stringCall.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                responseCode = response.code();
-                switch (responseCode){
-                    case 201:
-                        Message.makeText(activity, "Registration saved!",
-                                "Please check your email for confirmation.").show();
-                        break;
-                    default:
-                        Message.makeText(activity, "Error",
-                                response.message() + ", status code: " + responseCode).show();
-                        break;
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable throwable) {
-                Message.makeText(activity, "Error", throwable.getMessage()).show();
-            }
-        });
+        registerService.registerAccount(userDTO);
     }
 
     private static boolean isValidPassword(String password) {
@@ -118,5 +95,10 @@ public class RegistrationActivity extends AppCompatActivity implements MessageDi
         if(responseCode == 201){
             finish();
         }
+    }
+
+    @Override
+    public void registered(int responseCode) {
+        this.responseCode = responseCode;
     }
 }

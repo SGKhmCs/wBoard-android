@@ -91,10 +91,10 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void getUser(){
-        Call<User> userCall = App.getApi().getAccount(App.getToken().getIdTokenEx());
-        userCall.enqueue(new Callback<User>() {
+        Call<UserDTO> userCall = App.getApi().getAccount(App.getToken().getIdTokenEx());
+        userCall.enqueue(new Callback<UserDTO>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
                 switch (response.code()){
                     case 200:
                         drawer = buildDrawer(response.body());
@@ -107,13 +107,13 @@ public class MainActivity extends AppCompatActivity{
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable throwable) {
+            public void onFailure(Call<UserDTO> call, Throwable throwable) {
                 Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
             }
         });
     }
 
-    private Drawer buildDrawer(User user){
+    private Drawer buildDrawer(UserDTO userDTO){
         //if you want to update the items at a later time it is recommended to keep it in a variable
         PrimaryDrawerItem itemCreateBoard = new PrimaryDrawerItem()
                 .withIdentifier(1)
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity{
 
         //create the drawer and remember the `Drawer` result object
         return new DrawerBuilder()
-                .withAccountHeader(getAccount(user))
+                .withAccountHeader(getAccount(userDTO))
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .addDrawerItems(
@@ -163,16 +163,16 @@ public class MainActivity extends AppCompatActivity{
                 .build();
     }
 
-    private AccountHeader getAccount(User user){
+    private AccountHeader getAccount(UserDTO userDTO){
         // Create the AccountHeader
         String name = "";
         String email = "";
         String icon = "";
 
-        if(user != null) {
-            name = user.getFirstName() + " " + user.getLastName();
-            email = user.getEmail();
-            icon = user.getImageUrl();
+        if(userDTO != null) {
+            name = userDTO.getFirstName() + " " + userDTO.getLastName();
+            email = userDTO.getEmail();
+            icon = userDTO.getImageUrl();
         }
 
         ProfileDrawerItem profileDrawerItem = new ProfileDrawerItem()

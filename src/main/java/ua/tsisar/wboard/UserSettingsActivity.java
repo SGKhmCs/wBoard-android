@@ -1,8 +1,6 @@
 package ua.tsisar.wboard;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,7 +13,7 @@ import retrofit2.Response;
 
 public class UserSettingsActivity extends AppCompatActivity implements MessageDialog.IMessageDialogListener{
 
-    private User user;
+    private UserDTO userDTO;
 
     private EditText firstName;
     private EditText lastName;
@@ -41,10 +39,10 @@ public class UserSettingsActivity extends AppCompatActivity implements MessageDi
     }
 
     private void getAccount(){
-        Call<User> userCall = App.getApi().getAccount(App.getToken().getIdTokenEx());
-        userCall.enqueue(new Callback<User>() {
+        Call<UserDTO> userCall = App.getApi().getAccount(App.getToken().getIdTokenEx());
+        userCall.enqueue(new Callback<UserDTO>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
                 switch (response.code()){
                     case 200:
                         setValue(response.body());
@@ -57,24 +55,24 @@ public class UserSettingsActivity extends AppCompatActivity implements MessageDi
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable throwable) {
+            public void onFailure(Call<UserDTO> call, Throwable throwable) {
                 Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
             }
         });
     }
 
     public void saveAccount(View view){
-        user.setFirstName(firstName.getText().toString());
-        user.setLastName(lastName.getText().toString());
+        userDTO.setFirstName(firstName.getText().toString());
+        userDTO.setLastName(lastName.getText().toString());
 
         if(isValidEmail(email.getText().toString())){
-            user.setEmail(email.getText().toString());
+            userDTO.setEmail(email.getText().toString());
         }else{
             Message.makeText(getActivity(), "Error", "Please enter valid email!").show();
             return;
         }
 
-        Call<String> stringCall = App.getApi().saveAccount(App.getToken().getIdTokenEx(), user);
+        Call<String> stringCall = App.getApi().saveAccount(App.getToken().getIdTokenEx(), userDTO);
         stringCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -98,13 +96,13 @@ public class UserSettingsActivity extends AppCompatActivity implements MessageDi
         });
     }
 
-    private void setValue(User user){
-        if(user != null){
-            this.user = user;
+    private void setValue(UserDTO userDTO){
+        if(userDTO != null){
+            this.userDTO = userDTO;
 
-            firstName.setText(user.getFirstName());
-            lastName.setText(user.getLastName());
-            email.setText(user.getEmail());
+            firstName.setText(userDTO.getFirstName());
+            lastName.setText(userDTO.getLastName());
+            email.setText(userDTO.getEmail());
         }
     }
 

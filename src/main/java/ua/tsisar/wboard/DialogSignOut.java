@@ -8,6 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
 public class DialogSignOut extends DialogFragment {
+    private static final int RESULT_SIGN_OUT = -2;
 
     @NonNull
     @Override
@@ -19,7 +20,8 @@ public class DialogSignOut extends DialogFragment {
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Sign out", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        (getActivity()).finish();
+                        getActivity().setResult(RESULT_SIGN_OUT);
+                        getActivity().finish();
                     }
                 });
 
