@@ -1,6 +1,7 @@
 package ua.tsisar.wboard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -123,6 +124,7 @@ public class UserSettingsActivity extends AppCompatActivity implements MessageDi
     @Override
     public void onMessageHide() {
         if(saved){
+            setResult(RESULT_OK);
             finish();
         }
     }

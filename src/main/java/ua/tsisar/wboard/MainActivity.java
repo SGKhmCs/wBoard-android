@@ -1,29 +1,17 @@
 package ua.tsisar.wboard;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -36,19 +24,16 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
-import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity{
+
+    private static final int REQUEST_CODE_USER_SETTINGS = 3;
+    private static final int RESULT_SIGN_OUT = -2;
 
     private Toolbar toolbar;
     private Drawer drawer;
@@ -92,6 +77,18 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_USER_SETTINGS:
+                if(resultCode == RESULT_OK){
+                    // TODO костиль
+                    getUser();
+                }
+                break;
+        }
+
+    }
 
     private void getUser(){
         Call<User> userCall = App.getApi().getAccount(App.getToken().getIdTokenEx());
@@ -156,6 +153,7 @@ public class MainActivity extends AppCompatActivity{
                         // do something with the clicked item :D
                         switch (position) {
                             case 5:
+                                setResult(RESULT_SIGN_OUT);
                                 finish();
                                 break;
                         }
@@ -190,7 +188,8 @@ public class MainActivity extends AppCompatActivity{
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
                         Intent intent = new Intent(getActivity(), UserSettingsActivity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, REQUEST_CODE_USER_SETTINGS);
+
                         return false;
                     }
                 })

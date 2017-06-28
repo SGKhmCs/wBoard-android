@@ -1,12 +1,10 @@
 package ua.tsisar.wboard;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -17,7 +15,9 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private final int REQUEST_CODE_MAIN = 1;
+
+    private static final int REQUEST_CODE_MAIN = 1;
+    private static final int RESULT_SIGN_OUT = -2;
 
     private final String TOKEN = "token";
 
@@ -46,7 +46,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CODE_MAIN:
-                singOut();
+                if(resultCode == RESULT_SIGN_OUT) {
+                    singOut();
+                }
                 break;
         }
 
