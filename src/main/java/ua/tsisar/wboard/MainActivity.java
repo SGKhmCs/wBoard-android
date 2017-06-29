@@ -26,7 +26,7 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.squareup.picasso.Picasso;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements CreateBoardDialog.CreateBoardDialogListener {
 
     private static final int REQUEST_CODE_USER_SETTINGS = 3;
     private static final int RESULT_SIGN_OUT = -2;
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity{
     private Drawer drawer;
 
     private AccountService accountService;
+    private BoardService boardService;
 
     public Context getActivity() {
         return this;
@@ -55,6 +56,13 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         accountService.getAccount();
+
+        boardService = new BoardService(this, new BoardService.BoardListener() {
+            @Override
+            public void onBoarCreated(BoardDTO boardDTO) {
+
+            }
+        });
 
         drawerImageLoader();
     }
@@ -79,6 +87,11 @@ public class MainActivity extends AppCompatActivity{
                 break;
         }
 
+    }
+
+    @Override
+    public void onBoardName(BoardDTO boardDTO) {
+        boardService.createBoard(boardDTO);
     }
 
     private void dialogSignOut(){
@@ -140,6 +153,11 @@ public class MainActivity extends AppCompatActivity{
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         // do something with the clicked item :D
                         switch (position) {
+                            case 1:
+                                drawer.closeDrawer();
+                                CreateBoardDialog createBoardDialog = new CreateBoardDialog();
+                                createBoardDialog.show(getSupportFragmentManager(), "boardNameDialog");
+                                break;
                             case 5:
                                 setResult(RESULT_SIGN_OUT);
                                 dialogSignOut();
@@ -183,5 +201,4 @@ public class MainActivity extends AppCompatActivity{
                 })
                 .build();
     }
-
 }

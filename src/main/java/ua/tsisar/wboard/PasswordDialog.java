@@ -36,8 +36,8 @@ public class PasswordDialog extends DialogFragment{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_password, null);
-        passwordEditText = (EditText) view.findViewById(R.id.password_pd_edittext);
-        passwordComfEditText = (EditText) view.findViewById(R.id.password_comf_pd_edittext);
+        passwordEditText = (EditText) view.findViewById(R.id.password_editText);
+        passwordComfEditText = (EditText) view.findViewById(R.id.password_confirmation_editText);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)

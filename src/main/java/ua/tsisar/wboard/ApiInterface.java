@@ -46,4 +46,12 @@ public interface ApiInterface {
     })
     @POST("account/change_password")
     Call<String> changePassword(@Header("Authorization") String authorization, @Body String string);
+
+    @Headers({
+            "Content-Type: application/json",
+            "Accept: application/json"
+    })
+    @POST("boards")
+    Call<BoardDTO> createBoard(@Header("Authorization") String authorization, @Body BoardDTO boardDTO);
+
 }
