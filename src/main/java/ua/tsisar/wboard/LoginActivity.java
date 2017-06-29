@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-public class LoginActivity extends AppCompatActivity implements AuthenticateService.AuthenticateListener{
+public class LoginActivity extends AppCompatActivity{
 
     private static final int REQUEST_CODE_MAIN = 1;
     private static final int RESULT_SIGN_OUT = -2;
@@ -28,7 +28,13 @@ public class LoginActivity extends AppCompatActivity implements AuthenticateServ
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        authenticateService = new AuthenticateService(this);
+        authenticateService = new AuthenticateService(this, new AuthenticateService.AuthenticateListener() {
+            @Override
+            public void onAuthenticated() {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_MAIN);
+            }
+        });
         authenticateService.isAuthenticated();
 
         userName = (EditText) findViewById(R.id.userName_editText);
@@ -45,13 +51,6 @@ public class LoginActivity extends AppCompatActivity implements AuthenticateServ
                 }
                 break;
         }
-
-    }
-
-    @Override
-    public void authenticated() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivityForResult(intent, REQUEST_CODE_MAIN);
     }
 
     public void register(View view){
@@ -60,10 +59,10 @@ public class LoginActivity extends AppCompatActivity implements AuthenticateServ
     }
 
     public void signIn(View view){
-        AuthorizeDTO authorizeDTO = new AuthorizeDTO();
-        authorizeDTO.setUsername(userName.getText().toString());
-        authorizeDTO.setPassword(password.getText().toString());
-        authorizeDTO.setRememberMe(rememberMe.isChecked());
+        AuthorizeDTO authorizeDTO = new AuthorizeDTO(
+                userName.getText().toString(),
+                password.getText().toString(),
+                rememberMe.isChecked());
 
         authenticateService.authorize(authorizeDTO);
     }

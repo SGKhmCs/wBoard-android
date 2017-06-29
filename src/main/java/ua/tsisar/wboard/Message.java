@@ -14,6 +14,7 @@ public class Message{
     private static final String TAG = "myLogs";
     private final Context context;
     private static MessageDialog dialog;
+    private static Bundle arguments;
 
     public Message(Context context){
         this.context = context;
@@ -32,25 +33,37 @@ public class Message{
         return null;
     }
 
-
-    private static void makeText(String stringTitle, String stringMessage){
+    private static void setArguments(String stringTitle, String stringMessage){
         dialog = new MessageDialog();
-        Bundle arguments = new Bundle();
+        arguments = new Bundle();
         arguments.putString("title", stringTitle);
         arguments.putString("message", stringMessage);
-        dialog.setArguments(arguments);
+    }
 
+    private static void setArguments(String stringTitle, String stringMessage, int resultCode) {
+        dialog = new MessageDialog();
+        arguments = new Bundle();
+        arguments.putString("title", stringTitle);
+        arguments.putString("message", stringMessage);
+        arguments.putInt("result code", resultCode);
     }
 
     public static Message makeText(Context context, String stringTitle, String stringMessage){
         Message message = new Message(context);
-        makeText(stringTitle, stringMessage);
+        setArguments(stringTitle, stringMessage);
+        return message;
+    }
+
+    public static Message makeText(Context context, String stringTitle, String stringMessage, int resultCode){
+        Message message = new Message(context);
+        setArguments(stringTitle, stringMessage, resultCode);
         return message;
     }
 
     public boolean show(){
         FragmentManager fragmentManager = getSupportFragmentManager();
         if(fragmentManager != null) {
+            dialog.setArguments(arguments);
             dialog.show(getSupportFragmentManager(), "messageDialog");
             return true;
         }

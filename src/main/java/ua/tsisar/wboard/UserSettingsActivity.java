@@ -7,11 +7,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+public class UserSettingsActivity extends AppCompatActivity
+        implements MessageDialog.MessageListener, PasswordDialog.PasswordListener{
 
-public class UserSettingsActivity extends AppCompatActivity implements MessageDialog.IMessageDialogListener{
+    private static final int RESULT_SAVED = 1;
+    private static final int RESULT_PSW_CHANGED = 2;
 
     private UserDTO userDTO;
 
@@ -19,7 +19,8 @@ public class UserSettingsActivity extends AppCompatActivity implements MessageDi
     private EditText lastName;
     private EditText email;
 
-    private boolean saved = false;
+    private AccountService accountService;
+    private PasswordDialog passwordDialog;
 
     public Context getActivity() {
         return this;
@@ -34,31 +35,36 @@ public class UserSettingsActivity extends AppCompatActivity implements MessageDi
         lastName = (EditText) findViewById(R.id.lastName_editText);
         email = (EditText) findViewById(R.id.email_editText);
 
-        getAccount();
+        accountService = new AccountService(this, new AccountService.AccountListener() {
+            @Override
+            public void onAccountGetter(UserDTO userDTO) {
+                setUserDTO(userDTO);
+
+                firstName.setText(userDTO.getFirstName());
+                lastName.setText(userDTO.getLastName());
+                email.setText(userDTO.getEmail());
+            }
+        });
+        accountService.getAccount();
 
     }
 
-    private void getAccount(){
-        Call<UserDTO> userCall = App.getApi().getAccount(App.getToken().getIdTokenEx());
-        userCall.enqueue(new Callback<UserDTO>() {
-            @Override
-            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
-                switch (response.code()){
-                    case 200:
-                        setValue(response.body());
-                        break;
-                    default:
-                        Message.makeText(getActivity(), "Error",
-                                response.message() + ", status code: " + response.code()).show();
-                        break;
-                }
-            }
+    @Override
+    public void onMessageHide(int resultCode) {
+        switch (resultCode){
+            case RESULT_SAVED:
+                setResult(RESULT_OK);
+                finish();
+                break;
+            case RESULT_PSW_CHANGED:
+                passwordDialog.dismiss();
+                break;
+        }
+    }
 
-            @Override
-            public void onFailure(Call<UserDTO> call, Throwable throwable) {
-                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
-            }
-        });
+    @Override
+    public void onPasswordChanged(String password) {
+        accountService.changePassword(password);
     }
 
     public void saveAccount(View view){
@@ -72,38 +78,7 @@ public class UserSettingsActivity extends AppCompatActivity implements MessageDi
             return;
         }
 
-        Call<String> stringCall = App.getApi().saveAccount(App.getToken().getIdTokenEx(), userDTO);
-        stringCall.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                switch (response.code()){
-                    case 200:
-                        Message.makeText(getActivity(), "Saved!",
-                                "Your settings saved.").show();
-                        saved = true;
-                        break;
-                    default:
-                        Message.makeText(getActivity(), "Error",
-                                response.message() + ", status code: " + response.code()).show();
-                        break;
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable throwable) {
-                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
-            }
-        });
-    }
-
-    private void setValue(UserDTO userDTO){
-        if(userDTO != null){
-            this.userDTO = userDTO;
-
-            firstName.setText(userDTO.getFirstName());
-            lastName.setText(userDTO.getLastName());
-            email.setText(userDTO.getEmail());
-        }
+        accountService.saveAccount(userDTO);
     }
 
     private static boolean isValidEmail(String email) {
@@ -115,15 +90,11 @@ public class UserSettingsActivity extends AppCompatActivity implements MessageDi
     }
 
     public void editPassword(View view){
-        PasswordDialog dialog = new PasswordDialog();
-        dialog.show(getSupportFragmentManager(), "passwordDialog");
+        passwordDialog = new PasswordDialog();
+        passwordDialog.show(getSupportFragmentManager(), "passwordDialog");
     }
 
-    @Override
-    public void onMessageHide() {
-        if(saved){
-            setResult(RESULT_OK);
-            finish();
-        }
+    private void setUserDTO(UserDTO userDTO){
+        this.userDTO = userDTO;
     }
 }

@@ -16,7 +16,7 @@ public interface ApiInterface {
             "Accept: application/json"
     })
     @POST("authenticate")
-    Call<Token> authorize(@Body AuthorizeDTO authorizeDTO);
+    Call<TokenDTO> authorize(@Body AuthorizeDTO authorizeDTO);
 
     @Headers("Accept: text/plain")
     @GET("authenticate")

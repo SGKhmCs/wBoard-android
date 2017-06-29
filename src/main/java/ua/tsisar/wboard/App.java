@@ -10,7 +10,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class App extends Application {
 
     private static ApiInterface apiInterface;
-    private static Token token;
+    private static TokenDTO tokenDTO;
 
     @Override
     public void onCreate() {
@@ -23,7 +23,7 @@ public class App extends Application {
                 .build();
         apiInterface = retrofit.create(ApiInterface.class); //Создаем объект, при помощи которого будем выполнять запросы
 
-        token = new Token();
+        tokenDTO = new TokenDTO();
     }
 
     public static ApiInterface getApi() {
@@ -31,10 +31,10 @@ public class App extends Application {
     }
 
     public static void setIdToken(String idToken){
-        token.setIdToken(idToken);
+        tokenDTO.setIdToken(idToken);
     }
 
-    public static Token getToken(){
-        return token;
+    public static TokenDTO getTokenDTO(){
+        return tokenDTO;
     }
 }

@@ -26,10 +26,6 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.squareup.picasso.Picasso;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class MainActivity extends AppCompatActivity{
 
     private static final int REQUEST_CODE_USER_SETTINGS = 3;
@@ -37,6 +33,8 @@ public class MainActivity extends AppCompatActivity{
 
     private Toolbar toolbar;
     private Drawer drawer;
+
+    private AccountService accountService;
 
     public Context getActivity() {
         return this;
@@ -50,7 +48,45 @@ public class MainActivity extends AppCompatActivity{
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //TODO не завантажує картинку з нету
+        accountService = new AccountService(this, new AccountService.AccountListener() {
+            @Override
+            public void onAccountGetter(UserDTO userDTO) {
+                drawer = buildDrawer(userDTO);
+            }
+        });
+        accountService.getAccount();
+
+        drawerImageLoader();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawer != null && drawer.isDrawerOpen()){
+            drawer.closeDrawer();
+        }else {
+            dialogSignOut();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_USER_SETTINGS:
+                if(resultCode == RESULT_OK){
+                    // TODO костиль
+                    accountService.getAccount();
+                }
+                break;
+        }
+
+    }
+
+    private void dialogSignOut(){
+        DialogFragment dlg_exit = new DialogSignOut();
+        dlg_exit.show(getSupportFragmentManager(), "dialogSignOut");
+    }
+
+    private void drawerImageLoader(){
         DrawerImageLoader.init(new AbstractDrawerImageLoader() {
             @Override
             public void set(ImageView imageView, Uri uri, Drawable placeholder) {
@@ -62,54 +98,6 @@ public class MainActivity extends AppCompatActivity{
                 Picasso.with(imageView.getContext()).cancelRequest(imageView);
             }
 
-        });
-
-        getUser();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(drawer != null && drawer.isDrawerOpen()){
-            drawer.closeDrawer();
-        }else {
-            DialogFragment dlg_exit = new DialogSignOut();
-            dlg_exit.show(getSupportFragmentManager(), "signOut");
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_CODE_USER_SETTINGS:
-                if(resultCode == RESULT_OK){
-                    // TODO костиль
-                    getUser();
-                }
-                break;
-        }
-
-    }
-
-    private void getUser(){
-        Call<UserDTO> userCall = App.getApi().getAccount(App.getToken().getIdTokenEx());
-        userCall.enqueue(new Callback<UserDTO>() {
-            @Override
-            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
-                switch (response.code()){
-                    case 200:
-                        drawer = buildDrawer(response.body());
-                        break;
-                    default:
-                        Message.makeText(getActivity(), "Error",
-                                response.message() + ", status code: " + response.code()).show();
-                        break;
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserDTO> call, Throwable throwable) {
-                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
-            }
         });
     }
 
@@ -154,7 +142,7 @@ public class MainActivity extends AppCompatActivity{
                         switch (position) {
                             case 5:
                                 setResult(RESULT_SIGN_OUT);
-                                finish();
+                                dialogSignOut();
                                 break;
                         }
                         return true;

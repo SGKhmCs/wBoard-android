@@ -3,7 +3,7 @@ package ua.tsisar.wboard;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Token {
+public class TokenDTO {
 
     @SerializedName("id_token")
     @Expose

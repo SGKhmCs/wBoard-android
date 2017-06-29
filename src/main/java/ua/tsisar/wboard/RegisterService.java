@@ -1,30 +1,27 @@
 package ua.tsisar.wboard;
 
 import android.app.Activity;
+import android.content.Context;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by pavel on 28.06.17.
- */
+
 
 public class RegisterService {
 
-    private RegisterListener listener;
+    private static final int RESULT_REGISTERED = 3;
+    private Context context;
 
     private Activity getActivity() {
-        return (Activity) listener;
+        return (Activity) context;
     }
 
-    public RegisterService(RegisterListener listener){
-        this.listener = listener;
+    public RegisterService(Context context){
+        this.context = context;
     }
 
-    public interface RegisterListener {
-        void registered(int responseCode);
-    }
 
     public void registerAccount(UserDTO userDTO){
         Call<String> stringCall = App.getApi().registerAccount(userDTO);
@@ -33,9 +30,8 @@ public class RegisterService {
             public void onResponse(Call<String> call, Response<String> response) {
                 switch (response.code()){
                     case 201:
-                        listener.registered(response.code());
                         Message.makeText(getActivity(), "Registration saved!",
-                                "Please check your email for confirmation.").show();
+                                "Please check your email for confirmation.", RESULT_REGISTERED).show();
                         break;
                     default:
                         Message.makeText(getActivity(), "Error",

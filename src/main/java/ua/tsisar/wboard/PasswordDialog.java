@@ -1,6 +1,7 @@
 package ua.tsisar.wboard;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -11,14 +12,25 @@ import android.widget.EditText;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+public class PasswordDialog extends DialogFragment{
 
-public class PasswordDialog extends DialogFragment {
+    PasswordListener listener;
+
+    public interface PasswordListener {
+        void onPasswordChanged(String password);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (getActivity() instanceof MessageDialog.MessageListener) {
+            listener = (PasswordListener) getActivity();
+        }
+    }
 
     private EditText passwordEditText;
     private EditText passwordComfEditText;
+
 
     @NonNull
     @Override
@@ -40,7 +52,7 @@ public class PasswordDialog extends DialogFragment {
     public void onResume()
     {
         super.onResume();
-        final AlertDialog alertDialog = (AlertDialog)getDialog();
+        AlertDialog alertDialog = (AlertDialog)getDialog();
         if(alertDialog != null)
         {
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
@@ -48,13 +60,13 @@ public class PasswordDialog extends DialogFragment {
                 @Override
                 public void onClick(View v)
                 {
-                    edit(alertDialog);
+                    edit();
                 }
             });
         }
     }
 
-    private void edit(final AlertDialog alertDialog) {
+    private void edit() {
         String password = passwordEditText.getText().toString();
 
         if (password.length() > 3) {
@@ -72,28 +84,9 @@ public class PasswordDialog extends DialogFragment {
             return;
         }
 
-        Call<String> stringCall = App.getApi().changePassword(App.getToken().getIdTokenEx(), password);
-        stringCall.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                switch (response.code()){
-                    case 200:
-                        Message.makeText(getActivity(), "Password saved!",
-                                "Your password saved.").show();
-                        alertDialog.dismiss();
-                        break;
-                    default:
-                        Message.makeText(getActivity(), "Error",
-                                response.message() + ", status code: " + response.code()).show();
-                        break;
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable throwable) {
-                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
-            }
-        });
+        if (listener != null) {
+            listener.onPasswordChanged(password);
+        }
     }
 
     private static boolean isValidPassword(String password) {

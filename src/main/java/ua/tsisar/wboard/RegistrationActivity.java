@@ -9,15 +9,14 @@ import android.widget.EditText;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RegistrationActivity extends AppCompatActivity
-        implements MessageDialog.IMessageDialogListener, RegisterService.RegisterListener{
+public class RegistrationActivity extends AppCompatActivity implements MessageDialog.MessageListener{
+
+    private static final int RESULT_REGISTERED = 3;
 
     private EditText username;
     private EditText email;
     private EditText password;
     private EditText passwordConfirmation;
-
-    private int responseCode;
 
     private RegisterService registerService;
 
@@ -91,14 +90,9 @@ public class RegistrationActivity extends AppCompatActivity
     }
 
     @Override
-    public void onMessageHide() {
-        if(responseCode == 201){
+    public void onMessageHide(int resultCode) {
+        if(resultCode == RESULT_REGISTERED){
             finish();
         }
-    }
-
-    @Override
-    public void registered(int responseCode) {
-        this.responseCode = responseCode;
     }
 }
