@@ -1,8 +1,11 @@
-package ua.tsisar.wboard;
+package ua.tsisar.wboard.Service;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ua.tsisar.wboard.App;
+import ua.tsisar.wboard.DTO.UserDTO;
+import ua.tsisar.wboard.Service.Listener.AccountListener;
 
 public class AccountService {
 
@@ -11,16 +14,6 @@ public class AccountService {
     public AccountService(AccountListener listener){
         this.listener = listener;
     }
-
-    public interface AccountListener {
-        void onGetAccountResponse(Response<UserDTO> response);
-        void onIsAuthenticatedResponse(Response<String> response);
-        void onSaveAccountResponse(Response<String> response);
-        void onChangePasswordResponse(Response<String> response);
-        void onRegisterAccountResponse(Response<String> response);
-        void onFailure(Throwable throwable);
-    }
-
 
     public void getAccount(){
         Call<UserDTO> userCall = App.getApi().getAccount(App.getTokenDTO().getIdTokenEx());

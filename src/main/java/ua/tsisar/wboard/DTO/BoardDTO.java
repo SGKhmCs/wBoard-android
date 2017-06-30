@@ -1,7 +1,8 @@
-package ua.tsisar.wboard;
+package ua.tsisar.wboard.DTO;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class BoardDTO {
 
@@ -15,16 +16,24 @@ public class BoardDTO {
     @Expose
     private Boolean pub;
 
-    public BoardDTO(){}
-
-    public BoardDTO(String name){
-        this.name = name;
-        this.pub = false;
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public BoardDTO() {
     }
 
-    public BoardDTO(String name, boolean bup){
+    /**
+     *
+     * @param id
+     * @param name
+     * @param pub
+     */
+    public BoardDTO(Integer id, String name, Boolean pub) {
+        super();
+        this.id = id;
         this.name = name;
-        this.pub = bup;
+        this.pub = pub;
     }
 
     public Integer getId() {
@@ -49,6 +58,11 @@ public class BoardDTO {
 
     public void setPub(Boolean pub) {
         this.pub = pub;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
 }

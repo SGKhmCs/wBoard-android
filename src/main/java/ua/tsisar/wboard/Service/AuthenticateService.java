@@ -1,8 +1,12 @@
-package ua.tsisar.wboard;
+package ua.tsisar.wboard.Service;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ua.tsisar.wboard.App;
+import ua.tsisar.wboard.DTO.AuthorizeDTO;
+import ua.tsisar.wboard.DTO.TokenDTO;
+import ua.tsisar.wboard.Service.Listener.AuthenticateListener;
 
 public class AuthenticateService {
 
@@ -10,11 +14,6 @@ public class AuthenticateService {
 
     public AuthenticateService(AuthenticateListener listener){
         this.listener = listener;
-    }
-
-    public interface AuthenticateListener {
-        void onAuthorizeResponse(Response<TokenDTO> response);
-        void onFailure(Throwable throwable);
     }
 
     public void authorize(AuthorizeDTO authorizeDTO){

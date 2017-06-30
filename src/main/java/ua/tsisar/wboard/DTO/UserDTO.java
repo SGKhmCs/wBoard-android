@@ -1,9 +1,9 @@
-package ua.tsisar.wboard;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+package ua.tsisar.wboard.DTO;
 
 import java.util.List;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class UserDTO {
 
@@ -49,6 +49,48 @@ public class UserDTO {
     @SerializedName("password")
     @Expose
     private String password;
+
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public UserDTO() {
+    }
+
+    /**
+     *
+     * @param lastName
+     * @param imageUrl
+     * @param langKey
+     * @param password
+     * @param id
+     * @param authorities
+     * @param createdBy
+     * @param email
+     * @param activated
+     * @param lastModifiedBy
+     * @param lastModifiedDate
+     * @param login
+     * @param firstName
+     * @param createdDate
+     */
+    public UserDTO(Boolean activated, List<String> authorities, String createdBy, String createdDate, String email, String firstName, Integer id, String imageUrl, String langKey, String lastModifiedBy, String lastModifiedDate, String lastName, String login, String password) {
+        super();
+        this.activated = activated;
+        this.authorities = authorities;
+        this.createdBy = createdBy;
+        this.createdDate = createdDate;
+        this.email = email;
+        this.firstName = firstName;
+        this.id = id;
+        this.imageUrl = imageUrl;
+        this.langKey = langKey;
+        this.lastModifiedBy = lastModifiedBy;
+        this.lastModifiedDate = lastModifiedDate;
+        this.lastName = lastName;
+        this.login = login;
+        this.password = password;
+    }
 
     public Boolean getActivated() {
         return activated;
@@ -160,6 +202,11 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
 }

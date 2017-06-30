@@ -1,4 +1,4 @@
-package ua.tsisar.wboard;
+package ua.tsisar.wboard.Activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,9 +29,19 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import retrofit2.Response;
+import ua.tsisar.wboard.Service.AccountService;
+import ua.tsisar.wboard.Service.BoardService;
+import ua.tsisar.wboard.DTO.BoardDTO;
+import ua.tsisar.wboard.DTO.UserDTO;
+import ua.tsisar.wboard.Dialog.CreateBoardDialog;
+import ua.tsisar.wboard.Dialog.SignOutDialog;
+import ua.tsisar.wboard.Message;
+import ua.tsisar.wboard.R;
+import ua.tsisar.wboard.Service.Listener.AccountListener;
+import ua.tsisar.wboard.Service.Listener.BoardListener;
 
 public class MainActivity extends AppCompatActivity implements
-        CreateBoardDialog.CreateBoardDialogListener, AccountService.AccountListener, BoardService.BoardListener {
+        CreateBoardDialog.CreateBoardDialogListener, AccountListener, BoardListener {
 
     private static final int REQUEST_CODE_USER_SETTINGS = 3;
     private static final int RESULT_SIGN_OUT = -2;
@@ -90,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void dialogSignOut(){
-        DialogFragment dlg_exit = new DialogSignOut();
+        DialogFragment dlg_exit = new SignOutDialog();
         dlg_exit.show(getSupportFragmentManager(), "dialogSignOut");
     }
 
@@ -215,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements
                                 createBoardDialog.show(getSupportFragmentManager(), "boardNameDialog");
                                 break;
                             case 2:
-                                Intent intent = new Intent(getActivity(), MyBoardsActivity.class);
+                                Intent intent = new Intent(getActivity(), BoardsActivity.class);
                                 startActivity(intent);
                                 break;
                             case 5:

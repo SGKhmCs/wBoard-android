@@ -1,4 +1,4 @@
-package ua.tsisar.wboard;
+package ua.tsisar.wboard.Activity;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
@@ -8,9 +8,15 @@ import android.view.View;
 import android.widget.EditText;
 
 import retrofit2.Response;
+import ua.tsisar.wboard.Service.AccountService;
+import ua.tsisar.wboard.DTO.UserDTO;
+import ua.tsisar.wboard.Dialog.PasswordDialog;
+import ua.tsisar.wboard.Message;
+import ua.tsisar.wboard.R;
+import ua.tsisar.wboard.Service.Listener.AccountListener;
 
 public class UserSettingsActivity extends AppCompatActivity
-        implements PasswordDialog.PasswordListener, AccountService.AccountListener {
+        implements PasswordDialog.PasswordListener, AccountListener {
 
     private static final int RESULT_PSW_CHANGED = 2;
 

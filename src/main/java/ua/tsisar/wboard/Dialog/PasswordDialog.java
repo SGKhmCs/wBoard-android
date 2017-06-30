@@ -1,4 +1,4 @@
-package ua.tsisar.wboard;
+package ua.tsisar.wboard.Dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -11,6 +11,9 @@ import android.widget.EditText;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ua.tsisar.wboard.Message;
+import ua.tsisar.wboard.R;
 
 public class PasswordDialog extends DialogFragment{
 

@@ -1,4 +1,4 @@
-package ua.tsisar.wboard;
+package ua.tsisar.wboard.Activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +10,19 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import retrofit2.Response;
+import ua.tsisar.wboard.Service.AccountService;
+import ua.tsisar.wboard.App;
+import ua.tsisar.wboard.Service.AuthenticateService;
+import ua.tsisar.wboard.DTO.AuthorizeDTO;
+import ua.tsisar.wboard.DTO.TokenDTO;
+import ua.tsisar.wboard.DTO.UserDTO;
+import ua.tsisar.wboard.Message;
+import ua.tsisar.wboard.R;
+import ua.tsisar.wboard.Service.Listener.AccountListener;
+import ua.tsisar.wboard.Service.Listener.AuthenticateListener;
 
 public class LoginActivity extends AppCompatActivity
-        implements AuthenticateService.AuthenticateListener, AccountService.AccountListener{
+        implements AuthenticateListener, AccountListener {
 
     private static final String TOKEN = "token";
 
@@ -35,14 +45,12 @@ public class LoginActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        initViews();
+
         App.setIdToken(loadIdToken());
 
         authenticateService = new AuthenticateService(this);
         accountService = new AccountService(this);
-
-        userName = (EditText) findViewById(R.id.userName_editText);
-        password = (EditText) findViewById(R.id.password_editText);
-        rememberMe = (CheckBox) findViewById(R.id.rememberMe_checkBox);
     }
 
     @Override
@@ -115,6 +123,12 @@ public class LoginActivity extends AppCompatActivity
     @Override
     public void onFailure(Throwable throwable) {
         Message.makeText(this, "Error", throwable.getMessage()).show();
+    }
+
+    private void initViews(){
+        userName = (EditText) findViewById(R.id.userName_editText);
+        password = (EditText) findViewById(R.id.password_editText);
+        rememberMe = (CheckBox) findViewById(R.id.rememberMe_checkBox);
     }
 
     public void register(View view){

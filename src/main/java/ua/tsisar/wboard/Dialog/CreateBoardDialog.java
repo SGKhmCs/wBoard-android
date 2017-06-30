@@ -1,4 +1,4 @@
-package ua.tsisar.wboard;
+package ua.tsisar.wboard.Dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,6 +10,9 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+
+import ua.tsisar.wboard.DTO.BoardDTO;
+import ua.tsisar.wboard.R;
 
 public class CreateBoardDialog extends DialogFragment{
 
@@ -44,7 +47,7 @@ public class CreateBoardDialog extends DialogFragment{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (listener != null) {
-                            listener.onBoardName(new BoardDTO(nameEditText.getText().toString(), isPublic.isChecked()));
+                            listener.onBoardName(new BoardDTO(null, nameEditText.getText().toString(), isPublic.isChecked()));
                         }
                     }
                 });

@@ -1,4 +1,4 @@
-package ua.tsisar.wboard;
+package ua.tsisar.wboard.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,8 +10,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import retrofit2.Response;
+import ua.tsisar.wboard.Service.AccountService;
+import ua.tsisar.wboard.DTO.UserDTO;
+import ua.tsisar.wboard.Message;
+import ua.tsisar.wboard.R;
+import ua.tsisar.wboard.Service.Listener.AccountListener;
 
-public class RegistrationActivity extends AppCompatActivity implements AccountService.AccountListener{
+public class RegistrationActivity extends AppCompatActivity implements AccountListener {
 
     private EditText username;
     private EditText email;

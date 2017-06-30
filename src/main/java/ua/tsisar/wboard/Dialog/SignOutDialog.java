@@ -1,4 +1,4 @@
-package ua.tsisar.wboard;
+package ua.tsisar.wboard.Dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
-public class DialogSignOut extends DialogFragment {
+public class SignOutDialog extends DialogFragment {
     private static final int RESULT_SIGN_OUT = -2;
 
     @NonNull
