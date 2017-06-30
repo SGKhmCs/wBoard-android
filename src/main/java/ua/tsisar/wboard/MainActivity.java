@@ -158,6 +158,10 @@ public class MainActivity extends AppCompatActivity implements CreateBoardDialog
                                 CreateBoardDialog createBoardDialog = new CreateBoardDialog();
                                 createBoardDialog.show(getSupportFragmentManager(), "boardNameDialog");
                                 break;
+                            case 2:
+                                Intent intent = new Intent(getActivity(), MyBoardsActivity.class);
+                                startActivity(intent);
+                                break;
                             case 5:
                                 setResult(RESULT_SIGN_OUT);
                                 dialogSignOut();

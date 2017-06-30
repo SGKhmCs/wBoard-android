@@ -21,12 +21,13 @@
         </activity>
         <activity
             android:name=".RegistrationActivity"
-            android:label="Lebel in manifest"></activity>
+            android:label="Lebel in manifest" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".UserSettingsActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UserSettingsActivity" />
+        <activity android:name=".MyBoardsActivity"></activity>
     </application>
 
 </manifest>
