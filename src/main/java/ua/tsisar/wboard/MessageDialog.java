@@ -19,6 +19,7 @@ public class MessageDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String message = getArguments().getString("message");
         String title = getArguments().getString("title");
+        final Boolean finish = getArguments().getBoolean("finish", false);
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_message, null);
         TextView messageTextView = (TextView) view.findViewById(R.id.message_textView);
@@ -28,7 +29,14 @@ public class MessageDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle(title)
-                .setPositiveButton("Continue", null);
+                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(finish) {
+                            getActivity().finish();
+                        }
+                    }
+                });
         return builder.create();
     }
 }

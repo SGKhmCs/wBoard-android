@@ -11,7 +11,8 @@ import android.widget.EditText;
 
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity implements AuthenticateService.AuthenticateListener, AccountService.AccountListener{
+public class LoginActivity extends AppCompatActivity
+        implements AuthenticateService.AuthenticateListener, AccountService.AccountListener{
 
     private static final String TOKEN = "token";
 
@@ -103,6 +104,11 @@ public class LoginActivity extends AppCompatActivity implements AuthenticateServ
 
     @Override
     public void onChangePasswordResponse(Response<String> response) {
+
+    }
+
+    @Override
+    public void onRegisterAccountResponse(Response<String> response) {
 
     }
 

@@ -26,10 +26,12 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements
-        CreateBoardDialog.CreateBoardDialogListener, AccountService.AccountListener{
+        CreateBoardDialog.CreateBoardDialogListener, AccountService.AccountListener, BoardService.BoardListener {
 
     private static final int REQUEST_CODE_USER_SETTINGS = 3;
     private static final int RESULT_SIGN_OUT = -2;
@@ -55,12 +57,7 @@ public class MainActivity extends AppCompatActivity implements
         accountService = new AccountService(this);
         accountService.getAccount();
 
-        boardService = new BoardService(this, new BoardService.BoardListener() {
-            @Override
-            public void onBoarCreated(BoardDTO boardDTO) {
-
-            }
-        });
+        boardService = new BoardService(this);
 
         drawerImageLoader();
     }
@@ -79,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements
         switch (requestCode) {
             case REQUEST_CODE_USER_SETTINGS:
                 if(resultCode == RESULT_OK){
-                    Message.makeText(this, "Saved!", "Your settings saved.").show();
                     // TODO костиль
                     accountService.getAccount();
                 }
@@ -123,6 +119,34 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onChangePasswordResponse(Response<String> response) {
+
+    }
+
+    @Override
+    public void onRegisterAccountResponse(Response<String> response) {
+
+    }
+
+    @Override
+    public void onCreateBoardResponse(Response<BoardDTO> response) {
+        switch (response.code()){
+            case 201:
+                Message.makeText(getActivity(), "Created!", "Your board created.").show();
+                break;
+            default:
+                Message.makeText(getActivity(), "Error",
+                        response.message() + ", status code: " + response.code()).show();
+                break;
+        }
+    }
+
+    @Override
+    public void onGetAllBoardsResponse(Response<List<BoardDTO>> response) {
+
+    }
+
+    @Override
+    public void onSearchBoardsResponse(Response<List<BoardDTO>> response) {
 
     }
 

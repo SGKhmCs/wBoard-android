@@ -91,7 +91,7 @@ public class UserSettingsActivity extends AppCompatActivity
         switch (response.code()){
             case 200:
                 setResult(RESULT_OK);
-                finish();
+                Message.makeText(this, "Saved!", "Your settings saved.", true).show();
                 break;
             default:
                 Message.makeText(this, "Error",
@@ -111,6 +111,11 @@ public class UserSettingsActivity extends AppCompatActivity
                         response.message() + ", status code: " + response.code()).show();
                 break;
         }
+    }
+
+    @Override
+    public void onRegisterAccountResponse(Response<String> response) {
+
     }
 
     @Override

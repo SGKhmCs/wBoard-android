@@ -9,23 +9,23 @@ import android.widget.EditText;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RegistrationActivity extends AppCompatActivity {
+import retrofit2.Response;
 
-    private static final int RESULT_REGISTERED = 3;
+public class RegistrationActivity extends AppCompatActivity implements AccountService.AccountListener{
 
     private EditText username;
     private EditText email;
     private EditText password;
     private EditText passwordConfirmation;
 
-    private RegisterService registerService;
+    private AccountService accountService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        registerService = new RegisterService(this);
+        accountService = new AccountService(this);
 
         username = (EditText) findViewById(R.id.userName_editText);
         email = (EditText) findViewById(R.id.email_editText);
@@ -66,7 +66,7 @@ public class RegistrationActivity extends AppCompatActivity {
             return;
         }
 
-        registerService.registerAccount(userDTO);
+        accountService.registerAccount(userDTO);
     }
 
     private static boolean isValidPassword(String password) {
@@ -89,10 +89,43 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    public void onMessageHide(int resultCode) {
-//        if(resultCode == RESULT_REGISTERED){
-//            finish();
-//        }
-//    }
+    @Override
+    public void onGetAccountResponse(Response<UserDTO> response) {
+
+    }
+
+    @Override
+    public void onIsAuthenticatedResponse(Response<String> response) {
+
+    }
+
+    @Override
+    public void onSaveAccountResponse(Response<String> response) {
+
+    }
+
+    @Override
+    public void onChangePasswordResponse(Response<String> response) {
+
+    }
+
+    @Override
+    public void onRegisterAccountResponse(Response<String> response) {
+        switch (response.code()){
+            case 201:
+                Message.makeText(this, "Registration saved!",
+                        "Please check your email for confirmation.", true).show();
+                break;
+            default:
+                Message.makeText(this, "Error",
+                        response.message() + ", status code: " + response.code()).show();
+                break;
+        }
+    }
+
+    @Override
+    public void onFailure(Throwable throwable) {
+        Message.makeText(this, "Error", throwable.getMessage()).show();
+    }
+
 }

@@ -6,7 +6,6 @@ import retrofit2.Response;
 
 public class AccountService {
 
-    private static final int RESULT_PSW_CHANGED = 2;
     private AccountListener listener;
 
     public AccountService(AccountListener listener){
@@ -18,6 +17,7 @@ public class AccountService {
         void onIsAuthenticatedResponse(Response<String> response);
         void onSaveAccountResponse(Response<String> response);
         void onChangePasswordResponse(Response<String> response);
+        void onRegisterAccountResponse(Response<String> response);
         void onFailure(Throwable throwable);
     }
 
@@ -73,6 +73,21 @@ public class AccountService {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 listener.onIsAuthenticatedResponse(response);
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable throwable) {
+                listener.onFailure(throwable);
+            }
+        });
+    }
+
+    public void registerAccount(UserDTO userDTO){
+        Call<String> stringCall = App.getApi().registerAccount(userDTO);
+        stringCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                listener.onRegisterAccountResponse(response);
             }
 
             @Override

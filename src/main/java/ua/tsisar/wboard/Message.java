@@ -6,10 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
-/**
- * Created by pavel on 21.06.17.
- */
-
 public class Message{
     private static final String TAG = "myLogs";
     private final Context context;
@@ -40,12 +36,12 @@ public class Message{
         arguments.putString("message", stringMessage);
     }
 
-    private static void setArguments(String stringTitle, String stringMessage, int resultCode) {
+    private static void setArguments(String stringTitle, String stringMessage, boolean finish){
         dialog = new MessageDialog();
         arguments = new Bundle();
         arguments.putString("title", stringTitle);
         arguments.putString("message", stringMessage);
-        arguments.putInt("result code", resultCode);
+        arguments.putBoolean("finish", finish);
     }
 
     public static Message makeText(Context context, String stringTitle, String stringMessage){
@@ -54,9 +50,9 @@ public class Message{
         return message;
     }
 
-    public static Message makeText(Context context, String stringTitle, String stringMessage, int resultCode){
+    public static Message makeText(Context context, String stringTitle, String stringMessage, boolean finish){
         Message message = new Message(context);
-        setArguments(stringTitle, stringMessage, resultCode);
+        setArguments(stringTitle, stringMessage, finish);
         return message;
     }
 
