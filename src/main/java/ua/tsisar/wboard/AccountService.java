@@ -1,43 +1,24 @@
 package ua.tsisar.wboard;
 
-
-import android.app.Activity;
-import android.content.Context;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AccountService {
 
-    private static final int RESULT_SAVED = 1;
     private static final int RESULT_PSW_CHANGED = 2;
     private AccountListener listener;
-    private Context context;
-
-    private Activity getActivity() {
-       if(context == null) {
-           return (Activity) listener;
-       }else {
-           return (Activity) context;
-       }
-    }
-
-    public AccountService(Context context){
-        this.context = context;
-    }
 
     public AccountService(AccountListener listener){
         this.listener = listener;
     }
 
-    public AccountService(Context context, AccountListener listener){
-        this.context = context;
-        this.listener = listener;
-    }
-
     public interface AccountListener {
-        void onAccountGetter(UserDTO userDTO);
+        void onGetAccountResponse(Response<UserDTO> response);
+        void onIsAuthenticatedResponse(Response<String> response);
+        void onSaveAccountResponse(Response<String> response);
+        void onChangePasswordResponse(Response<String> response);
+        void onFailure(Throwable throwable);
     }
 
 
@@ -46,20 +27,12 @@ public class AccountService {
         userCall.enqueue(new Callback<UserDTO>() {
             @Override
             public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
-                switch (response.code()){
-                    case 200:
-                        listener.onAccountGetter(response.body());
-                        break;
-                    default:
-                        Message.makeText(getActivity(), "Error",
-                                response.message() + ", status code: " + response.code()).show();
-                        break;
-                }
+                listener.onGetAccountResponse(response);
             }
 
             @Override
             public void onFailure(Call<UserDTO> call, Throwable throwable) {
-                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
+                listener.onFailure(throwable);
             }
         });
     }
@@ -69,21 +42,12 @@ public class AccountService {
         stringCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                switch (response.code()){
-                    case 200:
-                        Message.makeText(getActivity(), "Saved!",
-                                "Your settings saved.", RESULT_SAVED).show();
-                        break;
-                    default:
-                        Message.makeText(getActivity(), "Error",
-                                response.message() + ", status code: " + response.code()).show();
-                        break;
-                }
+                listener.onSaveAccountResponse(response);
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable throwable) {
-                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
+                listener.onFailure(throwable);
             }
         });
     }
@@ -93,21 +57,27 @@ public class AccountService {
         stringCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                switch (response.code()){
-                    case 200:
-                        Message.makeText(getActivity(), "Password saved!",
-                                "Your password saved.", RESULT_PSW_CHANGED).show();
-                        break;
-                    default:
-                        Message.makeText(getActivity(), "Error",
-                                response.message() + ", status code: " + response.code()).show();
-                        break;
-                }
+                listener.onChangePasswordResponse(response);
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable throwable) {
-                Message.makeText(getActivity(), "Error", throwable.getMessage()).show();
+                listener.onFailure(throwable);
+            }
+        });
+    }
+
+    public void isAuthenticated(){
+        Call<String> stringCall = App.getApi().isAuthenticated(App.getTokenDTO().getIdTokenEx());
+        stringCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                listener.onIsAuthenticatedResponse(response);
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable throwable) {
+                listener.onFailure(throwable);
             }
         });
     }

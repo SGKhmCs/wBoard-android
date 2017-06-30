@@ -14,26 +14,11 @@ import android.widget.TextView;
 
 public class MessageDialog extends DialogFragment {
 
-    MessageListener listener;
-
-    public interface MessageListener {
-        void onMessageHide(int resultCode);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (getActivity() instanceof MessageListener) {
-            listener = (MessageListener) getActivity();
-        }
-    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String message = getArguments().getString("message");
         String title = getArguments().getString("title");
-        final int resultCode = getArguments().getInt("result code");
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_message, null);
         TextView messageTextView = (TextView) view.findViewById(R.id.message_textView);
@@ -43,14 +28,7 @@ public class MessageDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle(title)
-                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (listener != null) {
-                            listener.onMessageHide(resultCode);
-                        }
-                    }
-                });
+                .setPositiveButton("Continue", null);
         return builder.create();
     }
 }

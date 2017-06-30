@@ -26,7 +26,10 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.squareup.picasso.Picasso;
 
-public class MainActivity extends AppCompatActivity implements CreateBoardDialog.CreateBoardDialogListener {
+import retrofit2.Response;
+
+public class MainActivity extends AppCompatActivity implements
+        CreateBoardDialog.CreateBoardDialogListener, AccountService.AccountListener{
 
     private static final int REQUEST_CODE_USER_SETTINGS = 3;
     private static final int RESULT_SIGN_OUT = -2;
@@ -49,12 +52,7 @@ public class MainActivity extends AppCompatActivity implements CreateBoardDialog
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        accountService = new AccountService(this, new AccountService.AccountListener() {
-            @Override
-            public void onAccountGetter(UserDTO userDTO) {
-                drawer = buildDrawer(userDTO);
-            }
-        });
+        accountService = new AccountService(this);
         accountService.getAccount();
 
         boardService = new BoardService(this, new BoardService.BoardListener() {
@@ -81,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements CreateBoardDialog
         switch (requestCode) {
             case REQUEST_CODE_USER_SETTINGS:
                 if(resultCode == RESULT_OK){
+                    Message.makeText(this, "Saved!", "Your settings saved.").show();
                     // TODO костиль
                     accountService.getAccount();
                 }
@@ -97,6 +96,39 @@ public class MainActivity extends AppCompatActivity implements CreateBoardDialog
     private void dialogSignOut(){
         DialogFragment dlg_exit = new DialogSignOut();
         dlg_exit.show(getSupportFragmentManager(), "dialogSignOut");
+    }
+
+    @Override
+    public void onGetAccountResponse(Response<UserDTO> response) {
+        switch (response.code()){
+            case 200:
+                drawer = buildDrawer(response.body());
+                break;
+            default:
+                Message.makeText(this, "Error",
+                        response.message() + ", status code: " + response.code()).show();
+                break;
+        }
+    }
+
+    @Override
+    public void onIsAuthenticatedResponse(Response<String> response) {
+
+    }
+
+    @Override
+    public void onSaveAccountResponse(Response<String> response) {
+
+    }
+
+    @Override
+    public void onChangePasswordResponse(Response<String> response) {
+
+    }
+
+    @Override
+    public void onFailure(Throwable throwable) {
+        Message.makeText(this, "Error", throwable.getMessage()).show();
     }
 
     private void drawerImageLoader(){

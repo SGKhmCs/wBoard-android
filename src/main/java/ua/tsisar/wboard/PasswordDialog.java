@@ -23,13 +23,13 @@ public class PasswordDialog extends DialogFragment{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (getActivity() instanceof MessageDialog.MessageListener) {
+        if (getActivity() instanceof PasswordListener) {
             listener = (PasswordListener) getActivity();
         }
     }
 
     private EditText passwordEditText;
-    private EditText passwordComfEditText;
+    private EditText passwordConfirmationEditText;
 
 
     @NonNull
@@ -37,7 +37,7 @@ public class PasswordDialog extends DialogFragment{
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_password, null);
         passwordEditText = (EditText) view.findViewById(R.id.password_editText);
-        passwordComfEditText = (EditText) view.findViewById(R.id.password_confirmation_editText);
+        passwordConfirmationEditText = (EditText) view.findViewById(R.id.password_confirmation_editText);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(view)
@@ -70,7 +70,7 @@ public class PasswordDialog extends DialogFragment{
         String password = passwordEditText.getText().toString();
 
         if (password.length() > 3) {
-            if (password.equals(passwordComfEditText.getText().toString())) {
+            if (password.equals(passwordConfirmationEditText.getText().toString())) {
                 if (!isValidPassword(password)) {
                     Message.makeText(getActivity(), "Error", "Your password is unreliable!").show();
                     return;
@@ -86,6 +86,7 @@ public class PasswordDialog extends DialogFragment{
 
         if (listener != null) {
             listener.onPasswordChanged(password);
+            dismiss();
         }
     }
 

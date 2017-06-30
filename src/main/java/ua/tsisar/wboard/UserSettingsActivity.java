@@ -7,10 +7,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-public class UserSettingsActivity extends AppCompatActivity
-        implements MessageDialog.MessageListener, PasswordDialog.PasswordListener{
+import retrofit2.Response;
 
-    private static final int RESULT_SAVED = 1;
+public class UserSettingsActivity extends AppCompatActivity
+        implements PasswordDialog.PasswordListener, AccountService.AccountListener {
+
     private static final int RESULT_PSW_CHANGED = 2;
 
     private UserDTO userDTO;
@@ -20,7 +21,6 @@ public class UserSettingsActivity extends AppCompatActivity
     private EditText email;
 
     private AccountService accountService;
-    private PasswordDialog passwordDialog;
 
     public Context getActivity() {
         return this;
@@ -35,31 +35,9 @@ public class UserSettingsActivity extends AppCompatActivity
         lastName = (EditText) findViewById(R.id.lastName_editText);
         email = (EditText) findViewById(R.id.email_editText);
 
-        accountService = new AccountService(this, new AccountService.AccountListener() {
-            @Override
-            public void onAccountGetter(UserDTO userDTO) {
-                setUserDTO(userDTO);
-
-                firstName.setText(userDTO.getFirstName());
-                lastName.setText(userDTO.getLastName());
-                email.setText(userDTO.getEmail());
-            }
-        });
+        accountService = new AccountService(this);
         accountService.getAccount();
 
-    }
-
-    @Override
-    public void onMessageHide(int resultCode) {
-        switch (resultCode){
-            case RESULT_SAVED:
-                setResult(RESULT_OK);
-                finish();
-                break;
-            case RESULT_PSW_CHANGED:
-                passwordDialog.dismiss();
-                break;
-        }
     }
 
     @Override
@@ -90,11 +68,53 @@ public class UserSettingsActivity extends AppCompatActivity
     }
 
     public void editPassword(View view){
-        passwordDialog = new PasswordDialog();
+        PasswordDialog passwordDialog = new PasswordDialog();
         passwordDialog.show(getSupportFragmentManager(), "passwordDialog");
     }
 
-    private void setUserDTO(UserDTO userDTO){
-        this.userDTO = userDTO;
+    @Override
+    public void onGetAccountResponse(Response<UserDTO> response) {
+        userDTO = response.body();
+
+        firstName.setText(userDTO.getFirstName());
+        lastName.setText(userDTO.getLastName());
+        email.setText(userDTO.getEmail());
+    }
+
+    @Override
+    public void onIsAuthenticatedResponse(Response<String> response) {
+
+    }
+
+    @Override
+    public void onSaveAccountResponse(Response<String> response) {
+        switch (response.code()){
+            case 200:
+                setResult(RESULT_OK);
+                finish();
+                break;
+            default:
+                Message.makeText(this, "Error",
+                        response.message() + ", status code: " + response.code()).show();
+                break;
+        }
+    }
+
+    public void onChangePasswordResponse(Response<String> response){
+        switch (response.code()){
+            case 200:
+                Message.makeText(getActivity(), "Password saved!",
+                        "Your password saved.").show();
+                break;
+            default:
+                Message.makeText(getActivity(), "Error",
+                        response.message() + ", status code: " + response.code()).show();
+                break;
+        }
+    }
+
+    @Override
+    public void onFailure(Throwable throwable) {
+        Message.makeText(this, "Error", throwable.getMessage()).show();
     }
 }

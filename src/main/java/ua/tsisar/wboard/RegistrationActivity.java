@@ -9,7 +9,7 @@ import android.widget.EditText;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RegistrationActivity extends AppCompatActivity implements MessageDialog.MessageListener{
+public class RegistrationActivity extends AppCompatActivity {
 
     private static final int RESULT_REGISTERED = 3;
 
@@ -89,10 +89,10 @@ public class RegistrationActivity extends AppCompatActivity implements MessageDi
         }
     }
 
-    @Override
-    public void onMessageHide(int resultCode) {
-        if(resultCode == RESULT_REGISTERED){
-            finish();
-        }
-    }
+//    @Override
+//    public void onMessageHide(int resultCode) {
+//        if(resultCode == RESULT_REGISTERED){
+//            finish();
+//        }
+//    }
 }
