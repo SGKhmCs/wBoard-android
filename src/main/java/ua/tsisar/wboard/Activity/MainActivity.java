@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,25 +25,25 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 import retrofit2.Response;
+import ua.tsisar.wboard.Activity.Super.MainActivitySuper;
+import ua.tsisar.wboard.Dialog.CreateBoardDialog;
 import ua.tsisar.wboard.Service.AccountService;
 import ua.tsisar.wboard.Service.BoardService;
 import ua.tsisar.wboard.DTO.BoardDTO;
 import ua.tsisar.wboard.DTO.UserDTO;
-import ua.tsisar.wboard.Dialog.CreateBoardDialog;
 import ua.tsisar.wboard.Dialog.SignOutDialog;
 import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.R;
-import ua.tsisar.wboard.Service.Listener.AccountListener;
-import ua.tsisar.wboard.Service.Listener.BoardListener;
+import ua.tsisar.wboard.Dialog.CreateBoardDialog.CreateBoardDialogListener;
 
-public class MainActivity extends AppCompatActivity implements
-        CreateBoardDialog.CreateBoardDialogListener, AccountListener, BoardListener {
+public class MainActivity extends MainActivitySuper implements CreateBoardDialogListener {
 
     private static final int REQUEST_CODE_USER_SETTINGS = 3;
     private static final int RESULT_SIGN_OUT = -2;
+
+    private static final int RESPONSE_OK = 200;
+    private static final int RESPONSE_CREATED = 201;
 
     private Toolbar toolbar;
     private Drawer drawer;
@@ -106,63 +105,20 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onGetAccountResponse(Response<UserDTO> response) {
-        switch (response.code()){
-            case 200:
-                drawer = buildDrawer(response.body());
-                break;
-            default:
-                Message.makeText(this, "Error",
-                        response.message() + ", status code: " + response.code()).show();
-                break;
+        if(response.code() == RESPONSE_OK){
+            drawer = buildDrawer(response.body());
+            return;
         }
-    }
-
-    @Override
-    public void onIsAuthenticatedResponse(Response<String> response) {
-
-    }
-
-    @Override
-    public void onSaveAccountResponse(Response<String> response) {
-
-    }
-
-    @Override
-    public void onChangePasswordResponse(Response<String> response) {
-
-    }
-
-    @Override
-    public void onRegisterAccountResponse(Response<String> response) {
-
+        super.onGetAccountResponse(response);
     }
 
     @Override
     public void onCreateBoardResponse(Response<BoardDTO> response) {
-        switch (response.code()){
-            case 201:
-                Message.makeText(getActivity(), "Created!", "Your board created.").show();
-                break;
-            default:
-                Message.makeText(getActivity(), "Error",
-                        response.message() + ", status code: " + response.code()).show();
-                break;
+        if(response.code() == RESPONSE_CREATED) {
+            Message.makeText(getActivity(), "Created!", "Your board created.").show();
+            return;
         }
-    }
-
-    @Override
-    public void onGetAllBoardsResponse(Response<List<BoardDTO>> response) {
-
-    }
-
-    @Override
-    public void onSearchBoardsResponse(Response<List<BoardDTO>> response) {
-
-    }
-
-    @Override
-    public void onFailure(Throwable throwable) {
-        Message.makeText(this, "Error", throwable.getMessage()).show();
+        super.onCreateBoardResponse(response);
     }
 
     private void drawerImageLoader(){

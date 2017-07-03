@@ -1,5 +1,6 @@
 package ua.tsisar.wboard.Service;
 
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -12,6 +13,7 @@ import ua.tsisar.wboard.Service.Listener.BoardListener;
 public class BoardService {
 
     private BoardListener listener;
+
 
     public BoardService(BoardListener listener){
         this.listener = listener;
@@ -94,4 +96,5 @@ public class BoardService {
             }
         });
     }
+
 }

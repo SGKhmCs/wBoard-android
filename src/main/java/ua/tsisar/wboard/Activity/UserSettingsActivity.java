@@ -1,24 +1,23 @@
 package ua.tsisar.wboard.Activity;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
 import retrofit2.Response;
+import ua.tsisar.wboard.Activity.Super.UserSettingsActivitySuper;
 import ua.tsisar.wboard.Service.AccountService;
 import ua.tsisar.wboard.DTO.UserDTO;
 import ua.tsisar.wboard.Dialog.PasswordDialog;
+import ua.tsisar.wboard.Dialog.PasswordDialog.PasswordListener;
 import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.R;
-import ua.tsisar.wboard.Service.Listener.AccountListener;
 
-public class UserSettingsActivity extends AppCompatActivity
-        implements PasswordDialog.PasswordListener, AccountListener {
+public class UserSettingsActivity extends UserSettingsActivitySuper implements PasswordListener {
 
-    private static final int RESULT_PSW_CHANGED = 2;
+    private static final int RESPONSE_OK = 200;
 
     private UserDTO userDTO;
 
@@ -88,44 +87,20 @@ public class UserSettingsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onIsAuthenticatedResponse(Response<String> response) {
-
-    }
-
-    @Override
     public void onSaveAccountResponse(Response<String> response) {
-        switch (response.code()){
-            case 200:
-                setResult(RESULT_OK);
-                Message.makeText(this, "Saved!", "Your settings saved.", true).show();
-                break;
-            default:
-                Message.makeText(this, "Error",
-                        response.message() + ", status code: " + response.code()).show();
-                break;
+        if(response.code() == RESPONSE_OK){
+            Message.makeText(this, "Saved!", "Your settings saved.", true).show();
+            return;
         }
+        super.onSaveAccountResponse(response);
     }
 
     public void onChangePasswordResponse(Response<String> response){
-        switch (response.code()){
-            case 200:
-                Message.makeText(getActivity(), "Password saved!",
-                        "Your password saved.").show();
-                break;
-            default:
-                Message.makeText(getActivity(), "Error",
-                        response.message() + ", status code: " + response.code()).show();
-                break;
+        if(response.code() == RESPONSE_OK) {
+            Message.makeText(this, "Password saved!",
+                    "Your password saved.").show();
+            return;
         }
-    }
-
-    @Override
-    public void onRegisterAccountResponse(Response<String> response) {
-
-    }
-
-    @Override
-    public void onFailure(Throwable throwable) {
-        Message.makeText(this, "Error", throwable.getMessage()).show();
+        super.onChangePasswordResponse(response);
     }
 }

@@ -1,6 +1,7 @@
 package ua.tsisar.wboard;
 
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -17,7 +18,7 @@ import ua.tsisar.wboard.DTO.UserDTO;
 
 
 public interface ApiInterface {
-    String URL_BASE = "http://192.168.43.123:8080/api/";
+    String URL_BASE = "http://192.168.38.105:8080/api/";
 
     @Headers("Content-Type: application/json")
     @POST("authenticate")

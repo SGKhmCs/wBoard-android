@@ -3,28 +3,25 @@ package ua.tsisar.wboard.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
 import retrofit2.Response;
+import ua.tsisar.wboard.Activity.Super.LoginActivitySuper;
 import ua.tsisar.wboard.Service.AccountService;
 import ua.tsisar.wboard.App;
 import ua.tsisar.wboard.Service.AuthenticateService;
 import ua.tsisar.wboard.DTO.AuthorizeDTO;
 import ua.tsisar.wboard.DTO.TokenDTO;
-import ua.tsisar.wboard.DTO.UserDTO;
-import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.R;
-import ua.tsisar.wboard.Service.Listener.AccountListener;
-import ua.tsisar.wboard.Service.Listener.AuthenticateListener;
 
-public class LoginActivity extends AppCompatActivity
-        implements AuthenticateListener, AccountListener {
+public class LoginActivity extends LoginActivitySuper{
 
     private static final String TOKEN = "token";
+
+    private static final int RESPONSE_OK = 200;
 
     private static final int REQUEST_CODE_MAIN = 1;
     private static final int RESULT_SIGN_OUT = -2;
@@ -66,63 +63,28 @@ public class LoginActivity extends AppCompatActivity
 
     @Override
     public void onAuthorizeResponse(Response<TokenDTO> response) {
-        switch (response.code()){
-            case 200:
-                String idToken = response.body().getIdToken();
-                App.setIdToken(idToken);
-                if (rememberMe.isChecked()){
-                    saveIdToken(idToken);
-                } else {
-                    saveIdToken("");
-                }
-                accountService.isAuthenticated();
-                break;
-            default:
-                Message.makeText(this, "Error",
-                        response.message() + ", status code: " + response.code()).show();
-                break;
+        if(response.code() == RESPONSE_OK){
+            String idToken = response.body().getIdToken();
+            App.setIdToken(idToken);
+            if (rememberMe.isChecked()){
+                saveIdToken(idToken);
+            } else {
+                saveIdToken("");
+            }
+            accountService.isAuthenticated();
+            return;
         }
-    }
-
-    @Override
-    public void onGetAccountResponse(Response<UserDTO> response) {
-
+        super.onAuthorizeResponse(response);
     }
 
     @Override
     public void onIsAuthenticatedResponse(Response<String> response) {
-        switch (response.code()){
-            case 200:
-                if(!response.body().isEmpty()) {
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivityForResult(intent, REQUEST_CODE_MAIN);
-                }
-                break;
-            default:
-                Message.makeText(this, "Error",
-                        response.message() + ", status code: " + response.code()).show();
-                break;
+        if(response.code() == RESPONSE_OK && !response.body().isEmpty()) {
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_MAIN);
+            return;
         }
-    }
-
-    @Override
-    public void onSaveAccountResponse(Response<String> response) {
-
-    }
-
-    @Override
-    public void onChangePasswordResponse(Response<String> response) {
-
-    }
-
-    @Override
-    public void onRegisterAccountResponse(Response<String> response) {
-
-    }
-
-    @Override
-    public void onFailure(Throwable throwable) {
-        Message.makeText(this, "Error", throwable.getMessage()).show();
+        super.onIsAuthenticatedResponse(response);
     }
 
     private void initViews(){

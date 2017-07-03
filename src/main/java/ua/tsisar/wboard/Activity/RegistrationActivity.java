@@ -1,6 +1,5 @@
 package ua.tsisar.wboard.Activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,13 +9,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import retrofit2.Response;
+import ua.tsisar.wboard.Activity.Super.RegistrationActivitySuper;
 import ua.tsisar.wboard.Service.AccountService;
 import ua.tsisar.wboard.DTO.UserDTO;
 import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.R;
-import ua.tsisar.wboard.Service.Listener.AccountListener;
 
-public class RegistrationActivity extends AppCompatActivity implements AccountListener {
+public class RegistrationActivity extends RegistrationActivitySuper {
+
+    private static final int RESPONSE_CREATED = 201;
 
     private EditText username;
     private EditText email;
@@ -95,42 +96,12 @@ public class RegistrationActivity extends AppCompatActivity implements AccountLi
     }
 
     @Override
-    public void onGetAccountResponse(Response<UserDTO> response) {
-
-    }
-
-    @Override
-    public void onIsAuthenticatedResponse(Response<String> response) {
-
-    }
-
-    @Override
-    public void onSaveAccountResponse(Response<String> response) {
-
-    }
-
-    @Override
-    public void onChangePasswordResponse(Response<String> response) {
-
-    }
-
-    @Override
     public void onRegisterAccountResponse(Response<String> response) {
-        switch (response.code()){
-            case 201:
-                Message.makeText(this, "Registration saved!",
-                        "Please check your email for confirmation.", true).show();
-                break;
-            default:
-                Message.makeText(this, "Error",
-                        response.message() + ", status code: " + response.code()).show();
-                break;
+        if(response.code() == RESPONSE_CREATED){
+            Message.makeText(this, "Registration saved!",
+                    "Please check your email for confirmation.", true).show();
+            return;
         }
+        super.onRegisterAccountResponse(response);
     }
-
-    @Override
-    public void onFailure(Throwable throwable) {
-        Message.makeText(this, "Error", throwable.getMessage()).show();
-    }
-
 }
