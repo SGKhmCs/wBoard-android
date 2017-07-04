@@ -1,4 +1,4 @@
-package ua.tsisar.wboard.Activity;
+package ua.tsisar.wboard.activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,13 +9,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import retrofit2.Response;
-import ua.tsisar.wboard.Activity.Super.RegistrationActivitySuper;
-import ua.tsisar.wboard.Service.AccountService;
-import ua.tsisar.wboard.DTO.UserDTO;
+import ua.tsisar.wboard.activity.base.RegistrationActivityBase;
+import ua.tsisar.wboard.service.AccountService;
+import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.R;
 
-public class RegistrationActivity extends RegistrationActivitySuper {
+public class RegistrationActivity extends RegistrationActivityBase {
 
     private static final int RESPONSE_CREATED = 201;
 

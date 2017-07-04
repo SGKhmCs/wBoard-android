@@ -1,7 +1,7 @@
-package ua.tsisar.wboard.Service.Listener;
+package ua.tsisar.wboard.service.listener;
 
 import retrofit2.Response;
-import ua.tsisar.wboard.DTO.TokenDTO;
+import ua.tsisar.wboard.dto.TokenDTO;
 
 public interface AuthenticateListener {
     void onAuthorizeResponse(Response<TokenDTO> response);

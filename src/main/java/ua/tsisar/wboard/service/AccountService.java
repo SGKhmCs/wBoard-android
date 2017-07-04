@@ -1,11 +1,11 @@
-package ua.tsisar.wboard.Service;
+package ua.tsisar.wboard.service;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.tsisar.wboard.App;
-import ua.tsisar.wboard.DTO.UserDTO;
-import ua.tsisar.wboard.Service.Listener.AccountListener;
+import ua.tsisar.wboard.dto.UserDTO;
+import ua.tsisar.wboard.service.listener.AccountListener;
 
 public class AccountService {
 

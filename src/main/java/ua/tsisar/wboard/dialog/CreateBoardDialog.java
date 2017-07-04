@@ -1,4 +1,4 @@
-package ua.tsisar.wboard.Dialog;
+package ua.tsisar.wboard.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import ua.tsisar.wboard.DTO.BoardDTO;
+import ua.tsisar.wboard.dto.BoardDTO;
 import ua.tsisar.wboard.R;
 
 public class CreateBoardDialog extends DialogFragment{

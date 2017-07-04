@@ -1,4 +1,4 @@
-package ua.tsisar.wboard.Activity;
+package ua.tsisar.wboard.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,15 +9,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import retrofit2.Response;
-import ua.tsisar.wboard.Activity.Super.LoginActivitySuper;
-import ua.tsisar.wboard.Service.AccountService;
+import ua.tsisar.wboard.activity.base.LoginActivityBase;
+import ua.tsisar.wboard.service.AccountService;
 import ua.tsisar.wboard.App;
-import ua.tsisar.wboard.Service.AuthenticateService;
-import ua.tsisar.wboard.DTO.AuthorizeDTO;
-import ua.tsisar.wboard.DTO.TokenDTO;
+import ua.tsisar.wboard.service.AuthenticateService;
+import ua.tsisar.wboard.dto.AuthorizeDTO;
+import ua.tsisar.wboard.dto.TokenDTO;
 import ua.tsisar.wboard.R;
 
-public class LoginActivity extends LoginActivitySuper{
+public class LoginActivity extends LoginActivityBase {
 
     private static final String TOKEN = "token";
 

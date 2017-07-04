@@ -1,4 +1,4 @@
-package ua.tsisar.wboard.Activity;
+package ua.tsisar.wboard.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -12,15 +12,17 @@ import android.view.MenuItem;
 import java.util.List;
 
 import retrofit2.Response;
-import ua.tsisar.wboard.Activity.Super.BoardActivitySuper;
-import ua.tsisar.wboard.Service.BoardService;
-import ua.tsisar.wboard.DTO.BoardDTO;
+import ua.tsisar.wboard.activity.base.BoardActivityBase;
+import ua.tsisar.wboard.service.BoardService;
+import ua.tsisar.wboard.dto.BoardDTO;
 import ua.tsisar.wboard.R;
 
-public class BoardsActivity extends BoardActivitySuper {
+public class BoardsActivity extends BoardActivityBase {
 
     private static final int RESPONSE_OK = 200;
     private static final String TAG = "myLogs";
+
+    private BoardService boardService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,7 @@ public class BoardsActivity extends BoardActivitySuper {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final BoardService boardService = new  BoardService(this);
+        boardService = new  BoardService(this);
         boardService.getAllBoards(0, 3, "name");
         boardService.searchBoards(0, 10, "brd2", "name");
         boardService.getBoard(951);
@@ -56,6 +58,7 @@ public class BoardsActivity extends BoardActivitySuper {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: " + query);
+                boardService.searchBoards(0, 99, query, "id");
                 return false;
             }
 
@@ -86,6 +89,7 @@ public class BoardsActivity extends BoardActivitySuper {
     public void onSearchBoardsResponse(Response<List<BoardDTO>> response) {
         if(response.code() == RESPONSE_OK){
             List list = response.body();
+            Log.d(TAG, "onSearchBoardsResponse: " + list);
             return;
         }
         super.onSearchBoardsResponse(response);

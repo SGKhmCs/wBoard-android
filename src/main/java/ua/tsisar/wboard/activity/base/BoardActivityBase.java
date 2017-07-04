@@ -1,16 +1,16 @@
-package ua.tsisar.wboard.Activity.Super;
+package ua.tsisar.wboard.activity.base;
 
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
 
 import retrofit2.Response;
-import ua.tsisar.wboard.DTO.BoardDTO;
+import ua.tsisar.wboard.dto.BoardDTO;
 import ua.tsisar.wboard.Message;
-import ua.tsisar.wboard.Service.Listener.BoardListener;
+import ua.tsisar.wboard.service.listener.BoardListener;
 
 
-public class BoardActivitySuper extends AppCompatActivity implements BoardListener{
+public class BoardActivityBase extends AppCompatActivity implements BoardListener{
     @Override
     public void onCreateBoardResponse(Response<BoardDTO> response) {
         Message.makeText(this, "Error",

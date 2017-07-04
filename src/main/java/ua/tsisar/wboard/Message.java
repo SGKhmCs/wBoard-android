@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
-import ua.tsisar.wboard.Dialog.MessageDialog;
+import ua.tsisar.wboard.dialog.MessageDialog;
 
 public class Message{
     private static final String TAG = "myLogs";

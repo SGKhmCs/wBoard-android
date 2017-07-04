@@ -1,7 +1,7 @@
-package ua.tsisar.wboard.Service.Listener;
+package ua.tsisar.wboard.service.listener;
 
 import retrofit2.Response;
-import ua.tsisar.wboard.DTO.UserDTO;
+import ua.tsisar.wboard.dto.UserDTO;
 
 public interface AccountListener {
     void onGetAccountResponse(Response<UserDTO> response);

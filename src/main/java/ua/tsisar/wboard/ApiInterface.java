@@ -11,10 +11,10 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import ua.tsisar.wboard.DTO.AuthorizeDTO;
-import ua.tsisar.wboard.DTO.BoardDTO;
-import ua.tsisar.wboard.DTO.TokenDTO;
-import ua.tsisar.wboard.DTO.UserDTO;
+import ua.tsisar.wboard.dto.AuthorizeDTO;
+import ua.tsisar.wboard.dto.BoardDTO;
+import ua.tsisar.wboard.dto.TokenDTO;
+import ua.tsisar.wboard.dto.UserDTO;
 
 
 public interface ApiInterface {

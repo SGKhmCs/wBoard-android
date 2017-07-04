@@ -1,4 +1,4 @@
-package ua.tsisar.wboard.DTO;
+package ua.tsisar.wboard.dto;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

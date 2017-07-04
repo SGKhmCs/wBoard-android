@@ -1,4 +1,4 @@
-package ua.tsisar.wboard.Activity;
+package ua.tsisar.wboard.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,15 +7,15 @@ import android.view.View;
 import android.widget.EditText;
 
 import retrofit2.Response;
-import ua.tsisar.wboard.Activity.Super.UserSettingsActivitySuper;
-import ua.tsisar.wboard.Service.AccountService;
-import ua.tsisar.wboard.DTO.UserDTO;
-import ua.tsisar.wboard.Dialog.PasswordDialog;
-import ua.tsisar.wboard.Dialog.PasswordDialog.PasswordListener;
+import ua.tsisar.wboard.activity.base.UserSettingsActivityBase;
+import ua.tsisar.wboard.service.AccountService;
+import ua.tsisar.wboard.dto.UserDTO;
+import ua.tsisar.wboard.dialog.PasswordDialog;
+import ua.tsisar.wboard.dialog.PasswordDialog.PasswordListener;
 import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.R;
 
-public class UserSettingsActivity extends UserSettingsActivitySuper implements PasswordListener {
+public class UserSettingsActivity extends UserSettingsActivityBase implements PasswordListener {
 
     private static final int RESPONSE_OK = 200;
 

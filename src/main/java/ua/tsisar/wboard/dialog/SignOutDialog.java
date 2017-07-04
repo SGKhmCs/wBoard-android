@@ -1,4 +1,4 @@
-package ua.tsisar.wboard.Dialog;
+package ua.tsisar.wboard.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

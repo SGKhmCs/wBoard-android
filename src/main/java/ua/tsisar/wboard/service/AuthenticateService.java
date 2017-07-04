@@ -1,12 +1,12 @@
-package ua.tsisar.wboard.Service;
+package ua.tsisar.wboard.service;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.tsisar.wboard.App;
-import ua.tsisar.wboard.DTO.AuthorizeDTO;
-import ua.tsisar.wboard.DTO.TokenDTO;
-import ua.tsisar.wboard.Service.Listener.AuthenticateListener;
+import ua.tsisar.wboard.dto.AuthorizeDTO;
+import ua.tsisar.wboard.dto.TokenDTO;
+import ua.tsisar.wboard.service.listener.AuthenticateListener;
 
 public class AuthenticateService {
 

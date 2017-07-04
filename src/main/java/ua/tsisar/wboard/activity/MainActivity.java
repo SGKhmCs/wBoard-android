@@ -1,4 +1,4 @@
-package ua.tsisar.wboard.Activity;
+package ua.tsisar.wboard.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,18 +26,18 @@ import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.squareup.picasso.Picasso;
 
 import retrofit2.Response;
-import ua.tsisar.wboard.Activity.Super.MainActivitySuper;
-import ua.tsisar.wboard.Dialog.CreateBoardDialog;
-import ua.tsisar.wboard.Service.AccountService;
-import ua.tsisar.wboard.Service.BoardService;
-import ua.tsisar.wboard.DTO.BoardDTO;
-import ua.tsisar.wboard.DTO.UserDTO;
-import ua.tsisar.wboard.Dialog.SignOutDialog;
+import ua.tsisar.wboard.activity.base.MainActivityBase;
+import ua.tsisar.wboard.dialog.CreateBoardDialog;
+import ua.tsisar.wboard.service.AccountService;
+import ua.tsisar.wboard.service.BoardService;
+import ua.tsisar.wboard.dto.BoardDTO;
+import ua.tsisar.wboard.dto.UserDTO;
+import ua.tsisar.wboard.dialog.SignOutDialog;
 import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.R;
-import ua.tsisar.wboard.Dialog.CreateBoardDialog.CreateBoardDialogListener;
+import ua.tsisar.wboard.dialog.CreateBoardDialog.CreateBoardDialogListener;
 
-public class MainActivity extends MainActivitySuper implements CreateBoardDialogListener {
+public class MainActivity extends MainActivityBase implements CreateBoardDialogListener {
 
     private static final int REQUEST_CODE_USER_SETTINGS = 3;
     private static final int RESULT_SIGN_OUT = -2;

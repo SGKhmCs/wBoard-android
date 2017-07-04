@@ -1,13 +1,13 @@
-package ua.tsisar.wboard.Activity.Super;
+package ua.tsisar.wboard.activity.base;
 
 import android.support.v7.app.AppCompatActivity;
 
 import retrofit2.Response;
-import ua.tsisar.wboard.DTO.UserDTO;
+import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.Message;
-import ua.tsisar.wboard.Service.Listener.AccountListener;
+import ua.tsisar.wboard.service.listener.AccountListener;
 
-public class RegistrationActivitySuper extends AppCompatActivity implements AccountListener {
+public class RegistrationActivityBase extends AppCompatActivity implements AccountListener {
     @Override
     public void onGetAccountResponse(Response<UserDTO> response) {
         Message.makeText(this, "Error",

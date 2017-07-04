@@ -1,4 +1,4 @@
-package ua.tsisar.wboard.Service;
+package ua.tsisar.wboard.service;
 
 
 import java.util.List;
@@ -7,8 +7,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.tsisar.wboard.App;
-import ua.tsisar.wboard.DTO.BoardDTO;
-import ua.tsisar.wboard.Service.Listener.BoardListener;
+import ua.tsisar.wboard.dto.BoardDTO;
+import ua.tsisar.wboard.service.listener.BoardListener;
 
 public class BoardService {
 
