@@ -2,10 +2,9 @@ package ua.tsisar.wboard.activity.base;
 
 import android.support.v7.app.AppCompatActivity;
 
-import retrofit2.Response;
 import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.Message;
-import ua.tsisar.wboard.service.listener.AccountListener;
+import ua.tsisar.wboard.rest.helper.listener.AccountListener;
 
 
 public class UserSettingsActivityBase extends AppCompatActivity implements AccountListener {

@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.github.mrengineer13.snackbar.SnackBar;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -25,11 +27,10 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.squareup.picasso.Picasso;
 
-import retrofit2.Response;
 import ua.tsisar.wboard.activity.base.MainActivityBase;
 import ua.tsisar.wboard.dialog.CreateBoardDialog;
-import ua.tsisar.wboard.service.AccountService;
-import ua.tsisar.wboard.service.BoardService;
+import ua.tsisar.wboard.rest.helper.AccountService;
+import ua.tsisar.wboard.rest.helper.BoardService;
 import ua.tsisar.wboard.dto.BoardDTO;
 import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.dialog.SignOutDialog;
@@ -41,9 +42,6 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
 
     private static final int REQUEST_CODE_USER_SETTINGS = 3;
     private static final int RESULT_SIGN_OUT = -2;
-
-    private static final int RESPONSE_OK = 200;
-    private static final int RESPONSE_CREATED = 201;
 
     private Toolbar toolbar;
     private Drawer drawer;
@@ -72,6 +70,13 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        accountService.dispose();
+        boardService.dispose();
+    }
+
+    @Override
     public void onBackPressed() {
         if(drawer != null && drawer.isDrawerOpen()){
             drawer.closeDrawer();
@@ -94,7 +99,7 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
     }
 
     @Override
-    public void onBoardName(BoardDTO boardDTO) {
+    public void onCreateBoard(BoardDTO boardDTO) {
         boardService.createBoard(boardDTO);
     }
 
@@ -110,7 +115,22 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
 
     @Override
     public void onCreateBoardSuccess(BoardDTO boardDTO) {
-        Message.makeText(getActivity(), "Created!", "Your board created.").show();
+        new SnackBar.Builder(this)
+            .withMessage("Your board created.")
+            .withActionMessage("OK")
+            .withStyle(SnackBar.Style.INFO)
+            .withVisibilityChangeListener(new SnackBar.OnVisibilityChangeListener() {
+                @Override
+                public void onShow(int stackSize) {
+
+                }
+
+                @Override
+                public void onHide(int stackSize) {
+
+                }
+            })
+            .show();
     }
 
     private void drawerImageLoader(){

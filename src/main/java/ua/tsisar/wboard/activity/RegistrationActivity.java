@@ -8,9 +8,8 @@ import android.widget.EditText;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import retrofit2.Response;
 import ua.tsisar.wboard.activity.base.RegistrationActivityBase;
-import ua.tsisar.wboard.service.AccountService;
+import ua.tsisar.wboard.rest.helper.AccountService;
 import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.R;
@@ -37,6 +36,12 @@ public class RegistrationActivity extends RegistrationActivityBase {
         email = (EditText) findViewById(R.id.email_editText);
         password = (EditText) findViewById(R.id.password_editText);
         passwordConfirmation = (EditText) findViewById(R.id.password_confirmation_editText);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        accountService.dispose();
     }
 
     public void register(View view) {

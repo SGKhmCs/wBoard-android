@@ -21,7 +21,7 @@ public class CreateBoardDialog extends DialogFragment{
     private CheckBox isPublic;
 
     public interface CreateBoardDialogListener {
-        void onBoardName(BoardDTO boardDTO);
+        void onCreateBoard(BoardDTO boardDTO);
     }
 
     @Override
@@ -43,12 +43,11 @@ public class CreateBoardDialog extends DialogFragment{
                 .setView(view)
                 .setTitle("Create board")
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (listener != null) {
-                            listener.onBoardName(new BoardDTO(null, nameEditText.getText().toString(), isPublic.isChecked()));
-                        }
+                .setPositiveButton("Continue", (DialogInterface dialog, int which) -> {
+                    if (listener != null) {
+                        listener.onCreateBoard(
+                                new BoardDTO(null, nameEditText.getText().toString(),
+                                        isPublic.isChecked()));
                     }
                 });
 

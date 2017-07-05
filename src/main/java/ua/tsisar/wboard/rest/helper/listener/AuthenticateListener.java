@@ -1,4 +1,4 @@
-package ua.tsisar.wboard.service.listener;
+package ua.tsisar.wboard.rest.helper.listener;
 
 import ua.tsisar.wboard.dto.TokenDTO;
 

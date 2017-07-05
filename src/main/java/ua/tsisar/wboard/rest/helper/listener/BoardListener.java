@@ -1,8 +1,7 @@
-package ua.tsisar.wboard.service.listener;
+package ua.tsisar.wboard.rest.helper.listener;
 
 import java.util.List;
 
-import retrofit2.Response;
 import ua.tsisar.wboard.dto.BoardDTO;
 
 public interface BoardListener{

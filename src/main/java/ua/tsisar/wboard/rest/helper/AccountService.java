@@ -1,13 +1,15 @@
-package ua.tsisar.wboard.service;
+package ua.tsisar.wboard.rest.helper;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import ua.tsisar.wboard.App;
 import ua.tsisar.wboard.dto.UserDTO;
-import ua.tsisar.wboard.service.listener.AccountListener;
+import ua.tsisar.wboard.rest.helper.listener.AccountListener;
 
 public class AccountService {
 
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private AccountListener listener;
 
     public AccountService(AccountListener listener){
@@ -19,42 +21,48 @@ public class AccountService {
     }
 
     public void getAccount(){
-        App.getApi().getAccount(getIdToken())
+        compositeDisposable.add(App.getApi().getAccount(getIdToken())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(userDTO -> listener.onGetAccountSuccess(userDTO),
-                     throwable -> listener.onFailure(throwable));
+                     throwable -> listener.onFailure(throwable)));
     }
 
     public void saveAccount(UserDTO userDTO){
-        App.getApi().saveAccount(getIdToken(), userDTO)
+        compositeDisposable.add(App.getApi().saveAccount(getIdToken(), userDTO)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(string -> listener.onSaveAccountSuccess(string),
-                    throwable -> listener.onFailure(throwable));
+                    throwable -> listener.onFailure(throwable)));
     }
 
     public void changePassword(String password){
-        App.getApi().changePassword(getIdToken(), password)
+        compositeDisposable.add(App.getApi().changePassword(getIdToken(), password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(string -> listener.onChangePasswordSuccess(string),
-                    throwable -> listener.onFailure(throwable));
+                    throwable -> listener.onFailure(throwable)));
     }
 
     public void isAuthenticated(){
-        App.getApi().isAuthenticated(getIdToken())
+        compositeDisposable.add(App.getApi().isAuthenticated(getIdToken())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(string -> listener.onIsAuthenticatedSuccess(string),
-                    throwable -> listener.onFailure(throwable));
+                    throwable -> listener.onFailure(throwable)));
     }
 
     public void registerAccount(UserDTO userDTO){
-        App.getApi().registerAccount(userDTO)
+        compositeDisposable.add(App.getApi().registerAccount(userDTO)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(string -> listener.onRegisterAccountSuccess(string),
-                    throwable -> listener.onFailure(throwable));
+                    throwable -> listener.onFailure(throwable)));
+    }
+
+    public void dispose() {
+        if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
     }
 }

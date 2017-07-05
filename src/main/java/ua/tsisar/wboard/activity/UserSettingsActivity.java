@@ -6,9 +6,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-import retrofit2.Response;
 import ua.tsisar.wboard.activity.base.UserSettingsActivityBase;
-import ua.tsisar.wboard.service.AccountService;
+import ua.tsisar.wboard.rest.helper.AccountService;
 import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.dialog.PasswordDialog;
 import ua.tsisar.wboard.dialog.PasswordDialog.PasswordListener;
@@ -43,6 +42,12 @@ public class UserSettingsActivity extends UserSettingsActivityBase implements Pa
         accountService = new AccountService(this);
         accountService.getAccount();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        accountService.dispose();
     }
 
     @Override

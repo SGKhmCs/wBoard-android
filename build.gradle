@@ -76,6 +76,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.mikepenz:google-material-typeface:3.0.1.1.original@aar'
+    compile 'com.github.mrengineer13:snackbar:1.2.0'
 
     testCompile 'junit:junit:4.12'
 }

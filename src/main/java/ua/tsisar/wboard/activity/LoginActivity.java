@@ -8,11 +8,10 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import retrofit2.Response;
 import ua.tsisar.wboard.activity.base.LoginActivityBase;
-import ua.tsisar.wboard.service.AccountService;
+import ua.tsisar.wboard.rest.helper.AccountService;
 import ua.tsisar.wboard.App;
-import ua.tsisar.wboard.service.AuthenticateService;
+import ua.tsisar.wboard.rest.helper.AuthenticateService;
 import ua.tsisar.wboard.dto.AuthorizeDTO;
 import ua.tsisar.wboard.dto.TokenDTO;
 import ua.tsisar.wboard.R;
@@ -20,8 +19,6 @@ import ua.tsisar.wboard.R;
 public class LoginActivity extends LoginActivityBase {
 
     private static final String TOKEN = "token";
-
-    private static final int RESPONSE_OK = 200;
 
     private static final int REQUEST_CODE_MAIN = 1;
     private static final int RESULT_SIGN_OUT = -2;
@@ -51,9 +48,10 @@ public class LoginActivity extends LoginActivityBase {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         authenticateService.dispose();
+        accountService.dispose();
     }
 
     @Override

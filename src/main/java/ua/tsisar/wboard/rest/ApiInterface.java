@@ -1,9 +1,8 @@
-package ua.tsisar.wboard;
+package ua.tsisar.wboard.rest;
 
 import java.util.List;
 
 import io.reactivex.Single;
-import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -19,7 +18,7 @@ import ua.tsisar.wboard.dto.UserDTO;
 
 
 public interface ApiInterface {
-    String URL_BASE = "http://192.168.43.123:8080/api/";
+    String URL_BASE = "http://192.168.20.105:8080/api/";
 
     //User JWT Controller
     @Headers("Content-Type: application/json")
