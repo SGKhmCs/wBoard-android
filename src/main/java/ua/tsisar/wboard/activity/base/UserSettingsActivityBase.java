@@ -9,34 +9,30 @@ import ua.tsisar.wboard.service.listener.AccountListener;
 
 
 public class UserSettingsActivityBase extends AppCompatActivity implements AccountListener {
+
     @Override
-    public void onGetAccountResponse(Response<UserDTO> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onGetAccountSuccess(UserDTO userDTO) {
+
     }
 
     @Override
-    public void onIsAuthenticatedResponse(Response<String> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onIsAuthenticatedSuccess(String string) {
+
     }
 
     @Override
-    public void onSaveAccountResponse(Response<String> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onSaveAccountSuccess(String string) {
+
     }
 
     @Override
-    public void onChangePasswordResponse(Response<String> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onChangePasswordSuccess(String string) {
+
     }
 
     @Override
-    public void onRegisterAccountResponse(Response<String> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onRegisterAccountSuccess(String string) {
+
     }
 
     @Override

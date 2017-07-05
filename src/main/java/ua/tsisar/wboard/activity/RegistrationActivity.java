@@ -96,12 +96,8 @@ public class RegistrationActivity extends RegistrationActivityBase {
     }
 
     @Override
-    public void onRegisterAccountResponse(Response<String> response) {
-        if(response.code() == RESPONSE_CREATED){
-            Message.makeText(this, "Registration saved!",
-                    "Please check your email for confirmation.", true).show();
-            return;
-        }
-        super.onRegisterAccountResponse(response);
+    public void onRegisterAccountSuccess(String string) {
+        Message.makeText(this, "Registration saved!",
+            "Please check your email for confirmation.", true).show();
     }
 }

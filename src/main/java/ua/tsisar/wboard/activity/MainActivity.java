@@ -104,21 +104,13 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
     }
 
     @Override
-    public void onGetAccountResponse(Response<UserDTO> response) {
-        if(response.code() == RESPONSE_OK){
-            drawer = buildDrawer(response.body());
-            return;
-        }
-        super.onGetAccountResponse(response);
+    public void onGetAccountSuccess(UserDTO userDTO) {
+         drawer = buildDrawer(userDTO);
     }
 
     @Override
-    public void onCreateBoardResponse(Response<BoardDTO> response) {
-        if(response.code() == RESPONSE_CREATED) {
-            Message.makeText(getActivity(), "Created!", "Your board created.").show();
-            return;
-        }
-        super.onCreateBoardResponse(response);
+    public void onCreateBoardSuccess(BoardDTO boardDTO) {
+        Message.makeText(getActivity(), "Created!", "Your board created.").show();
     }
 
     private void drawerImageLoader(){

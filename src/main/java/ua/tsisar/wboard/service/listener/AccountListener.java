@@ -4,10 +4,10 @@ import retrofit2.Response;
 import ua.tsisar.wboard.dto.UserDTO;
 
 public interface AccountListener {
-    void onGetAccountResponse(Response<UserDTO> response);
-    void onIsAuthenticatedResponse(Response<String> response);
-    void onSaveAccountResponse(Response<String> response);
-    void onChangePasswordResponse(Response<String> response);
-    void onRegisterAccountResponse(Response<String> response);
+    void onGetAccountSuccess(UserDTO userDTO);
+    void onIsAuthenticatedSuccess(String string);
+    void onSaveAccountSuccess(String string);
+    void onChangePasswordSuccess(String string);
+    void onRegisterAccountSuccess(String string);
     void onFailure(Throwable throwable);
 }

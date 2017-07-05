@@ -11,22 +11,31 @@ import ua.tsisar.wboard.service.listener.BoardListener;
 
 
 public class BoardActivityBase extends AppCompatActivity implements BoardListener{
+
+
     @Override
-    public void onCreateBoardResponse(Response<BoardDTO> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onSearchBoardsSuccess(List<BoardDTO> list) {
+
     }
 
     @Override
-    public void onGetAllBoardsResponse(Response<List<BoardDTO>> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onGetAllBoardsSuccess(List<BoardDTO> list) {
+
     }
 
     @Override
-    public void onSearchBoardsResponse(Response<List<BoardDTO>> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onCreateBoardSuccess(BoardDTO boardDTO) {
+
+    }
+
+    @Override
+    public void onUpdateBoardSuccess(BoardDTO boardDTO) {
+
+    }
+
+    @Override
+    public void onGetBoardSuccess(BoardDTO boardDTO) {
+
     }
 
     @Override

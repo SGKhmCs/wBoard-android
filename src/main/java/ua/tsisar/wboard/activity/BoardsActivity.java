@@ -9,17 +9,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.List;
-
-import retrofit2.Response;
 import ua.tsisar.wboard.activity.base.BoardActivityBase;
 import ua.tsisar.wboard.service.BoardService;
 import ua.tsisar.wboard.dto.BoardDTO;
 import ua.tsisar.wboard.R;
 
+
 public class BoardsActivity extends BoardActivityBase {
 
-    private static final int RESPONSE_OK = 200;
     private static final String TAG = "myLogs";
 
     private BoardService boardService;
@@ -38,7 +35,6 @@ public class BoardsActivity extends BoardActivityBase {
         boardService.getBoard(951);
         BoardDTO boardDTO = new BoardDTO(952, "brdUUUU", true);
         boardService.updateBoard(boardDTO);
-        String s = boardDTO.toString();
     }
 
     @Override
@@ -69,29 +65,5 @@ public class BoardsActivity extends BoardActivityBase {
             }
         });
         return true;
-    }
-
-    @Override
-    public void onCreateBoardResponse(Response<BoardDTO> response) {
-        super.onCreateBoardResponse(response);
-    }
-
-    @Override
-    public void onGetAllBoardsResponse(Response<List<BoardDTO>> response) {
-        if(response.code() == RESPONSE_OK){
-            List list = response.body();
-            return;
-        }
-        super.onGetAllBoardsResponse(response);
-    }
-
-    @Override
-    public void onSearchBoardsResponse(Response<List<BoardDTO>> response) {
-        if(response.code() == RESPONSE_OK){
-            List list = response.body();
-            Log.d(TAG, "onSearchBoardsResponse: " + list);
-            return;
-        }
-        super.onSearchBoardsResponse(response);
     }
 }

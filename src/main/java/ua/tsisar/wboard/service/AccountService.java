@@ -1,92 +1,114 @@
 package ua.tsisar.wboard.service;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 import ua.tsisar.wboard.App;
 import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.service.listener.AccountListener;
 
 public class AccountService {
 
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private AccountListener listener;
 
     public AccountService(AccountListener listener){
         this.listener = listener;
     }
 
-    public void getAccount(){
-        Call<UserDTO> userCall = App.getApi().getAccount(App.getTokenDTO().getIdTokenEx());
-        userCall.enqueue(new Callback<UserDTO>() {
-            @Override
-            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
-                listener.onGetAccountResponse(response);
-            }
+    private String getIdToken(){
+        return App.getTokenDTO().getIdTokenEx();
+    }
 
-            @Override
-            public void onFailure(Call<UserDTO> call, Throwable throwable) {
-                listener.onFailure(throwable);
-            }
-        });
+    public void getAccount(){
+        compositeDisposable.add(App.getApi().getAccount(getIdToken())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<UserDTO>(){
+                    @Override
+                    public void onSuccess(UserDTO userDTO) {
+                        listener.onGetAccountSuccess(userDTO);
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        throwable.printStackTrace();
+                        listener.onFailure(throwable);
+                    }
+                }));
     }
 
     public void saveAccount(UserDTO userDTO){
-        Call<String> stringCall = App.getApi().saveAccount(App.getTokenDTO().getIdTokenEx(), userDTO);
-        stringCall.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                listener.onSaveAccountResponse(response);
-            }
+        compositeDisposable.add(App.getApi().saveAccount(getIdToken(), userDTO)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<String>(){
+                    @Override
+                    public void onSuccess(String string) {
+                        listener.onSaveAccountSuccess(string);
+                    }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable throwable) {
-                listener.onFailure(throwable);
-            }
-        });
+                    @Override
+                    public void onError(Throwable throwable) {
+                        throwable.printStackTrace();
+                        listener.onFailure(throwable);
+                    }
+                }));
     }
 
     public void changePassword(String password){
-        Call<String> stringCall = App.getApi().changePassword(App.getTokenDTO().getIdTokenEx(), password);
-        stringCall.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                listener.onChangePasswordResponse(response);
-            }
+        compositeDisposable.add(App.getApi().changePassword(getIdToken(), password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<String>(){
+                    @Override
+                    public void onSuccess(String string) {
+                        listener.onChangePasswordSuccess(string);
+                    }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable throwable) {
-                listener.onFailure(throwable);
-            }
-        });
+                    @Override
+                    public void onError(Throwable throwable) {
+                        throwable.printStackTrace();
+                        listener.onFailure(throwable);
+                    }
+                }));
     }
 
     public void isAuthenticated(){
-        Call<String> stringCall = App.getApi().isAuthenticated(App.getTokenDTO().getIdTokenEx());
-        stringCall.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                listener.onIsAuthenticatedResponse(response);
-            }
+        compositeDisposable.add(App.getApi().isAuthenticated(getIdToken())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<String>(){
+                    @Override
+                    public void onSuccess(String string) {
+                        listener.onIsAuthenticatedSuccess(string);
+                    }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable throwable) {
-                listener.onFailure(throwable);
-            }
-        });
+                    @Override
+                    public void onError(Throwable throwable) {
+                        throwable.printStackTrace();
+                        listener.onFailure(throwable);
+                    }
+                }));
     }
 
     public void registerAccount(UserDTO userDTO){
-        Call<String> stringCall = App.getApi().registerAccount(userDTO);
-        stringCall.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                listener.onRegisterAccountResponse(response);
-            }
+        compositeDisposable.add(App.getApi().registerAccount(userDTO)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<String>(){
+                    @Override
+                    public void onSuccess(String string) {
+                        listener.onRegisterAccountSuccess(string);
+                    }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable throwable) {
-                listener.onFailure(throwable);
-            }
-        });
+                    @Override
+                    public void onError(Throwable throwable) {
+                        throwable.printStackTrace();
+                        listener.onFailure(throwable);
+                    }
+                }));
+
     }
 }

@@ -62,29 +62,23 @@ public class LoginActivity extends LoginActivityBase {
     }
 
     @Override
-    public void onAuthorizeResponse(Response<TokenDTO> response) {
-        if(response.code() == RESPONSE_OK){
-            String idToken = response.body().getIdToken();
-            App.setIdToken(idToken);
-            if (rememberMe.isChecked()){
-                saveIdToken(idToken);
-            } else {
-                saveIdToken("");
-            }
-            accountService.isAuthenticated();
-            return;
+    public void onAuthorizeSuccess(TokenDTO tokenDTO) {
+        String idToken = tokenDTO.getIdToken();
+        App.setIdToken(idToken);
+        if (rememberMe.isChecked()){
+            saveIdToken(idToken);
+        } else {
+            saveIdToken("");
         }
-        super.onAuthorizeResponse(response);
+        accountService.isAuthenticated();
     }
 
     @Override
-    public void onIsAuthenticatedResponse(Response<String> response) {
-        if(response.code() == RESPONSE_OK && !response.body().isEmpty()) {
+    public void onIsAuthenticatedSuccess(String string) {
+        if(!string.isEmpty()) {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivityForResult(intent, REQUEST_CODE_MAIN);
-            return;
         }
-        super.onIsAuthenticatedResponse(response);
     }
 
     private void initViews(){

@@ -14,6 +14,7 @@ public class Message{
     private static MessageDialog dialog;
     private static Bundle arguments;
 
+    //TODO Snackbar???
     public Message(Context context){
         this.context = context;
     }

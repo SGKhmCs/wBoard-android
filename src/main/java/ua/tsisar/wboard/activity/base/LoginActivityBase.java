@@ -10,40 +10,35 @@ import ua.tsisar.wboard.service.listener.AccountListener;
 import ua.tsisar.wboard.service.listener.AuthenticateListener;
 
 public class LoginActivityBase extends AppCompatActivity implements AuthenticateListener, AccountListener {
+
+
     @Override
-    public void onGetAccountResponse(Response<UserDTO> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onAuthorizeSuccess(TokenDTO tokenDTO) {
     }
 
     @Override
-    public void onIsAuthenticatedResponse(Response<String> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onGetAccountSuccess(UserDTO userDTO) {
+
     }
 
     @Override
-    public void onSaveAccountResponse(Response<String> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onIsAuthenticatedSuccess(String string) {
+
     }
 
     @Override
-    public void onChangePasswordResponse(Response<String> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onSaveAccountSuccess(String string) {
+
     }
 
     @Override
-    public void onRegisterAccountResponse(Response<String> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onChangePasswordSuccess(String string) {
+
     }
 
     @Override
-    public void onAuthorizeResponse(Response<TokenDTO> response) {
-        Message.makeText(this, "Error",
-                response.message() + ", status code: " + response.code()).show();
+    public void onRegisterAccountSuccess(String string) {
+
     }
 
     @Override

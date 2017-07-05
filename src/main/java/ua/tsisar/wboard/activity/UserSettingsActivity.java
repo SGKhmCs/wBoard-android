@@ -78,8 +78,8 @@ public class UserSettingsActivity extends UserSettingsActivityBase implements Pa
     }
 
     @Override
-    public void onGetAccountResponse(Response<UserDTO> response) {
-        userDTO = response.body();
+    public void onGetAccountSuccess(UserDTO userDTO) {
+        this.userDTO = userDTO;
 
         firstName.setText(userDTO.getFirstName());
         lastName.setText(userDTO.getLastName());
@@ -87,20 +87,12 @@ public class UserSettingsActivity extends UserSettingsActivityBase implements Pa
     }
 
     @Override
-    public void onSaveAccountResponse(Response<String> response) {
-        if(response.code() == RESPONSE_OK){
-            Message.makeText(this, "Saved!", "Your settings saved.", true).show();
-            return;
-        }
-        super.onSaveAccountResponse(response);
+    public void onSaveAccountSuccess(String string) {
+        Message.makeText(this, "Saved!", "Your settings saved.", true).show();
     }
 
-    public void onChangePasswordResponse(Response<String> response){
-        if(response.code() == RESPONSE_OK) {
-            Message.makeText(this, "Password saved!",
-                    "Your password saved.").show();
-            return;
-        }
-        super.onChangePasswordResponse(response);
+    @Override
+    public void onChangePasswordSuccess(String string){
+        Message.makeText(this, "Password saved!", "Your password saved.").show();
     }
 }

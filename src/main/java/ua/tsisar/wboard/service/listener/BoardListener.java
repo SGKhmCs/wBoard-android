@@ -6,8 +6,10 @@ import retrofit2.Response;
 import ua.tsisar.wboard.dto.BoardDTO;
 
 public interface BoardListener{
-    void onCreateBoardResponse(Response<BoardDTO> response);
-    void onGetAllBoardsResponse(Response<List<BoardDTO>> response);
-    void onSearchBoardsResponse(Response<List<BoardDTO>> response);
+    void onSearchBoardsSuccess(List<BoardDTO> list);
+    void onGetAllBoardsSuccess(List<BoardDTO> list);
+    void onCreateBoardSuccess(BoardDTO boardDTO);
+    void onUpdateBoardSuccess(BoardDTO boardDTO);
+    void onGetBoardSuccess(BoardDTO boardDTO);
     void onFailure(Throwable throwable);
 }
