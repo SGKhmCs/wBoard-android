@@ -2,8 +2,9 @@ package ua.tsisar.wboard.activity.base;
 
 import android.support.v7.app.AppCompatActivity;
 
+import com.github.mrengineer13.snackbar.SnackBar;
+
 import ua.tsisar.wboard.dto.UserDTO;
-import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.rest.helper.listener.AccountListener;
 
 
@@ -36,6 +37,9 @@ public class UserSettingsActivityBase extends AppCompatActivity implements Accou
 
     @Override
     public void onFailure(Throwable throwable) {
-        Message.makeText(this, "Error", throwable.getMessage()).show();
+        new SnackBar.Builder(this)
+            .withMessage(throwable.getMessage())
+            .withStyle(SnackBar.Style.ALERT)
+            .show();
     }
 }

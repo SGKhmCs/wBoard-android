@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 
+import com.github.mrengineer13.snackbar.SnackBar;
+
 import java.util.List;
 
 import ua.tsisar.wboard.activity.base.BoardActivityBase;
@@ -98,5 +100,13 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
     @Override
     public void onCreateBoard(BoardDTO boardDTO) {
         boardService.createBoard(boardDTO);
+    }
+
+    @Override
+    public void onCreateBoardSuccess(BoardDTO boardDTO) {
+        new SnackBar.Builder(this)
+                .withMessage("Your board created.")
+                .withStyle(SnackBar.Style.INFO)
+                .show();
     }
 }

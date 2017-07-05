@@ -5,18 +5,17 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
+import com.github.mrengineer13.snackbar.SnackBar;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ua.tsisar.wboard.activity.base.RegistrationActivityBase;
 import ua.tsisar.wboard.rest.helper.AccountService;
 import ua.tsisar.wboard.dto.UserDTO;
-import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.R;
 
 public class RegistrationActivity extends RegistrationActivityBase {
-
-    private static final int RESPONSE_CREATED = 201;
 
     private EditText username;
     private EditText email;
@@ -56,7 +55,7 @@ public class RegistrationActivity extends RegistrationActivityBase {
         if(isValidEmail(stringEmail)){
             userDTO.setEmail(stringEmail);
         }else{
-            Message.makeText(this, "Error", "Please enter valid email!").show();
+            errorMessage("Please enter valid email!");
             return;
         }
 
@@ -65,15 +64,15 @@ public class RegistrationActivity extends RegistrationActivityBase {
                 if (isValidPassword(stringPassword)) {
                     userDTO.setPassword(stringPassword);
                 } else {
-                    Message.makeText(this, "Error", "Your password is unreliable!").show();
+                    errorMessage("Your password is unreliable!");
                     return;
                 }
             } else {
-                Message.makeText(this, "Error", "Your passwords do not match!").show();
+                errorMessage("Your passwords do not match!");
                 return;
             }
         } else {
-            Message.makeText(this, "Error", "Your password too short!").show();
+            errorMessage("Your password too short!");
             return;
         }
 
@@ -102,7 +101,28 @@ public class RegistrationActivity extends RegistrationActivityBase {
 
     @Override
     public void onRegisterAccountSuccess(String string) {
-        Message.makeText(this, "Registration saved!",
-            "Please check your email for confirmation.", true).show();
+        new SnackBar.Builder(this)
+                .withMessage("Please check your email for confirmation.")
+                .withActionMessage("OK")
+                .withStyle(SnackBar.Style.CONFIRM)
+                .withVisibilityChangeListener(new SnackBar.OnVisibilityChangeListener() {
+                    @Override
+                    public void onShow(int stackSize) {
+
+                    }
+
+                    @Override
+                    public void onHide(int stackSize) {
+                        finish();
+                    }
+                })
+                .show();
+    }
+
+    private SnackBar errorMessage(String message){
+        return new SnackBar.Builder(this)
+                .withMessage(message)
+                .withStyle(SnackBar.Style.ALERT)
+                .show();
     }
 }

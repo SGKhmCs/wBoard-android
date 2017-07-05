@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -34,7 +33,6 @@ import ua.tsisar.wboard.rest.helper.BoardService;
 import ua.tsisar.wboard.dto.BoardDTO;
 import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.dialog.SignOutDialog;
-import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.R;
 import ua.tsisar.wboard.dialog.CreateBoardDialog.CreateBoardDialogListener;
 
@@ -117,19 +115,7 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
     public void onCreateBoardSuccess(BoardDTO boardDTO) {
         new SnackBar.Builder(this)
             .withMessage("Your board created.")
-            .withActionMessage("OK")
             .withStyle(SnackBar.Style.INFO)
-            .withVisibilityChangeListener(new SnackBar.OnVisibilityChangeListener() {
-                @Override
-                public void onShow(int stackSize) {
-
-                }
-
-                @Override
-                public void onHide(int stackSize) {
-
-                }
-            })
             .show();
     }
 
@@ -182,9 +168,7 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
                         new DividerDrawerItem(),
                         itemSignOut
                 )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                .withOnDrawerItemClickListener((View view, int position, IDrawerItem drawerItem) -> {
                         // do something with the clicked item :D
                         switch (position) {
                             case 1:
@@ -202,7 +186,6 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
                                 break;
                         }
                         return true;
-                    }
                 })
                 .build();
     }
@@ -228,14 +211,10 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.background_blue)
                 .addProfiles(profileDrawerItem)
-                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-                    @Override
-                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                .withOnAccountHeaderListener((View view, IProfile profile, boolean currentProfile) -> {
                         Intent intent = new Intent(getActivity(), UserSettingsActivity.class);
                         startActivityForResult(intent, REQUEST_CODE_USER_SETTINGS);
-
                         return false;
-                    }
                 })
                 .build();
     }

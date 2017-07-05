@@ -9,10 +9,11 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
 
+import com.github.mrengineer13.snackbar.SnackBar;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.R;
 
 public class PasswordDialog extends DialogFragment{
@@ -56,16 +57,9 @@ public class PasswordDialog extends DialogFragment{
     {
         super.onResume();
         AlertDialog alertDialog = (AlertDialog)getDialog();
-        if(alertDialog != null)
-        {
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    edit();
-                }
-            });
+        if(alertDialog != null){
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setOnClickListener((View v) -> edit());
         }
     }
 
@@ -75,15 +69,15 @@ public class PasswordDialog extends DialogFragment{
         if (password.length() > 3) {
             if (password.equals(passwordConfirmationEditText.getText().toString())) {
                 if (!isValidPassword(password)) {
-                    Message.makeText(getActivity(), "Error", "Your password is unreliable!").show();
+                    errorMessage("Your password is unreliable!");
                     return;
                 }
             } else {
-                Message.makeText(getActivity(), "Error", "Your passwords do not match!").show();
+                errorMessage("Your passwords do not match!");
                 return;
             }
         } else {
-            Message.makeText(getActivity(), "Error", "Your password too short!").show();
+            errorMessage("Your password too short!");
             return;
         }
 
@@ -103,5 +97,12 @@ public class PasswordDialog extends DialogFragment{
 
         return matcher.matches();
 
+    }
+
+    private SnackBar errorMessage(String message){
+        return new SnackBar.Builder(getActivity())
+                .withMessage(message)
+                .withStyle(SnackBar.Style.ALERT)
+                .show();
     }
 }

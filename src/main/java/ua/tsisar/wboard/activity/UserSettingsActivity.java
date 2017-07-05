@@ -6,20 +6,18 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
+import com.github.mrengineer13.snackbar.SnackBar;
+
 import ua.tsisar.wboard.activity.base.UserSettingsActivityBase;
 import ua.tsisar.wboard.rest.helper.AccountService;
 import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.dialog.PasswordDialog;
 import ua.tsisar.wboard.dialog.PasswordDialog.PasswordListener;
-import ua.tsisar.wboard.Message;
 import ua.tsisar.wboard.R;
 
 public class UserSettingsActivity extends UserSettingsActivityBase implements PasswordListener {
 
-    private static final int RESPONSE_OK = 200;
-
     private UserDTO userDTO;
-
     private EditText firstName;
     private EditText lastName;
     private EditText email;
@@ -62,7 +60,10 @@ public class UserSettingsActivity extends UserSettingsActivityBase implements Pa
         if(isValidEmail(email.getText().toString())){
             userDTO.setEmail(email.getText().toString());
         }else{
-            Message.makeText(getActivity(), "Error", "Please enter valid email!").show();
+            new SnackBar.Builder(this)
+                    .withMessage("Please enter valid email!")
+                    .withStyle(SnackBar.Style.ALERT)
+                    .show();
             return;
         }
 
@@ -93,11 +94,28 @@ public class UserSettingsActivity extends UserSettingsActivityBase implements Pa
 
     @Override
     public void onSaveAccountSuccess(String string) {
-        Message.makeText(this, "Saved!", "Your settings saved.", true).show();
+        new SnackBar.Builder(this)
+                .withMessage("Your settings saved!")
+                .withActionMessage("OK")
+                .withStyle(SnackBar.Style.CONFIRM)
+                .withVisibilityChangeListener(new SnackBar.OnVisibilityChangeListener() {
+                    @Override
+                    public void onShow(int stackSize) {
+                    }
+
+                    @Override
+                    public void onHide(int stackSize) {
+                        finish();
+                    }
+                })
+                .show();
     }
 
     @Override
     public void onChangePasswordSuccess(String string){
-        Message.makeText(this, "Password saved!", "Your password saved.").show();
+        new SnackBar.Builder(this)
+                .withMessage("Your password saved!")
+                .withStyle(SnackBar.Style.INFO)
+                .show();
     }
 }
