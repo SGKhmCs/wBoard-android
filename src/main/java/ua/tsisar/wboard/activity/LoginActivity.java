@@ -51,6 +51,12 @@ public class LoginActivity extends LoginActivityBase {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        authenticateService.dispose();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CODE_MAIN:

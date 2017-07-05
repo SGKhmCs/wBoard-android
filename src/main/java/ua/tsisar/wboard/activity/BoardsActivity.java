@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
 import ua.tsisar.wboard.activity.base.BoardActivityBase;
-import ua.tsisar.wboard.service.BoardService;
 import ua.tsisar.wboard.dto.BoardDTO;
+import ua.tsisar.wboard.service.BoardService;
 import ua.tsisar.wboard.R;
 
 
@@ -20,6 +22,10 @@ public class BoardsActivity extends BoardActivityBase {
     private static final String TAG = "myLogs";
 
     private BoardService boardService;
+
+    private static final int PAGE = 0;
+    private static final int SIZE = 99;
+    private static final String SORT = "id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +36,6 @@ public class BoardsActivity extends BoardActivityBase {
         setSupportActionBar(toolbar);
 
         boardService = new  BoardService(this);
-        boardService.getAllBoards(0, 3, "name");
-        boardService.searchBoards(0, 10, "brd2", "name");
-        boardService.getBoard(951);
-        BoardDTO boardDTO = new BoardDTO(952, "brdUUUU", true);
-        boardService.updateBoard(boardDTO);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class BoardsActivity extends BoardActivityBase {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: " + query);
-                boardService.searchBoards(0, 99, query, "id");
+                boardService.searchBoards(PAGE, SIZE, query, SORT);
                 return false;
             }
 
@@ -65,5 +66,10 @@ public class BoardsActivity extends BoardActivityBase {
             }
         });
         return true;
+    }
+
+    @Override
+    public void onSearchBoardsSuccess(List<BoardDTO> list) {
+        Log.d(TAG, "onSearchBoardsSuccess: " + list);
     }
 }
