@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.lucasurbas.listitemview.ListItemView;
+
 import java.util.List;
 
 import ua.tsisar.wboard.dto.BoardDTO;
@@ -37,8 +39,8 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.boardViewHol
             return;
 
         //TODO add owner, date etc
-        holder.name.setText(list.get(position).getName());
-        holder.desc.setText("Created by User, 01.07.2017");
+        holder.listItemView.setTitle(list.get(position).getName());
+        holder.listItemView.setSubtitle(list.get(position).getPub()?"Board is public. ":"" + "Your role admin.");
     }
 
     @Override
@@ -48,14 +50,12 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.boardViewHol
 
     public class boardViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name;
-        TextView desc;
+        ListItemView listItemView;
 
         public boardViewHolder(View itemView) {
 
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.board_name_textView);
-            desc = (TextView) itemView.findViewById(R.id.board_desc_textView);
+            listItemView = (ListItemView) itemView.findViewById(R.id.board_list_item_view);
         }
     }
 }

@@ -116,6 +116,7 @@
     <orderEntry type="library" exported="" name="support-core-ui-25.4.0" level="project" />
     <orderEntry type="library" exported="" name="materialize-1.0.2" level="project" />
     <orderEntry type="library" exported="" name="snackbar-1.2.0" level="project" />
+    <orderEntry type="library" exported="" name="listitemview-1.0.2" level="project" />
     <orderEntry type="library" exported="" name="converter-scalars-2.3.0" level="project" />
     <orderEntry type="library" exported="" name="rxandroid-2.0.1" level="project" />
     <orderEntry type="library" exported="" name="google-material-typeface-3.0.1.1.original" level="project" />
