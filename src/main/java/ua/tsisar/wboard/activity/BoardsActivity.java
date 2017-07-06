@@ -4,6 +4,9 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,11 +19,12 @@ import com.github.mrengineer13.snackbar.SnackBar;
 
 import java.util.List;
 
+import ua.tsisar.wboard.BoardAdapter;
 import ua.tsisar.wboard.activity.base.BoardActivityBase;
 import ua.tsisar.wboard.dialog.CreateBoardDialog;
 import ua.tsisar.wboard.dialog.CreateBoardDialog.CreateBoardDialogListener;
 import ua.tsisar.wboard.dto.BoardDTO;
-import ua.tsisar.wboard.rest.helper.BoardService;
+import ua.tsisar.wboard.rest.helper.BoardHelper;
 import ua.tsisar.wboard.R;
 
 
@@ -29,13 +33,16 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
     private static final String TAG = "myLogs";
 
     private FloatingActionButton addBoardFAB;
-    private BoardService boardService;
+    private BoardHelper boardHelper;
 
     private static final int PAGE = 0;
     private static final int SIZE = 99;
     private static final String SORT = "id";
 
     private AlphaAnimation buttonClick;
+
+    private BoardAdapter boardAdapter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +61,18 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
             addBoardFAB.startAnimation(buttonClick);
         });
 
-        boardService = new  BoardService(this);
+        boardHelper = new BoardHelper(this);
+        boardHelper.getAllBoards(PAGE, SIZE, SORT);
+
+        recyclerView = (RecyclerView) findViewById(R.id.board_recyclerView);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        boardService.dispose();
+        boardHelper.dispose();
     }
 
     @Override
@@ -79,7 +91,7 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: " + query);
-                boardService.searchBoards(PAGE, SIZE, query, SORT);
+                boardHelper.searchBoards(PAGE, SIZE, query, SORT);
                 return false;
             }
 
@@ -93,13 +105,22 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
     }
 
     @Override
+    public void onGetAllBoardsSuccess(List<BoardDTO> list) {
+        Log.d(TAG, "onGetAllBoardsSuccess: " + list);
+        boardAdapter = new BoardAdapter(this, list);
+        recyclerView.setAdapter(boardAdapter);
+    }
+
+    @Override
     public void onSearchBoardsSuccess(List<BoardDTO> list) {
         Log.d(TAG, "onSearchBoardsSuccess: " + list);
+        boardAdapter = new BoardAdapter(this, list);
+        recyclerView.setAdapter(boardAdapter);
     }
 
     @Override
     public void onCreateBoard(BoardDTO boardDTO) {
-        boardService.createBoard(boardDTO);
+        boardHelper.createBoard(boardDTO);
     }
 
     @Override

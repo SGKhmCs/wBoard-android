@@ -18,11 +18,9 @@ public class SignOutDialog extends DialogFragment {
                 .setTitle("Sign out") // current user?
                 .setMessage("Do you want to sign out?")
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("Sign out", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                .setPositiveButton("Sign out", (DialogInterface dialog, int id) -> {
                         getActivity().setResult(RESULT_SIGN_OUT);
                         getActivity().finish();
-                    }
                 });
 
         return builder.create();

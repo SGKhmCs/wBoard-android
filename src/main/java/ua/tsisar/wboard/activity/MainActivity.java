@@ -28,8 +28,8 @@ import com.squareup.picasso.Picasso;
 
 import ua.tsisar.wboard.activity.base.MainActivityBase;
 import ua.tsisar.wboard.dialog.CreateBoardDialog;
-import ua.tsisar.wboard.rest.helper.AccountService;
-import ua.tsisar.wboard.rest.helper.BoardService;
+import ua.tsisar.wboard.rest.helper.AccountHelper;
+import ua.tsisar.wboard.rest.helper.BoardHelper;
 import ua.tsisar.wboard.dto.BoardDTO;
 import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.dialog.SignOutDialog;
@@ -44,8 +44,8 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
     private Toolbar toolbar;
     private Drawer drawer;
 
-    private AccountService accountService;
-    private BoardService boardService;
+    private AccountHelper accountHelper;
+    private BoardHelper boardHelper;
 
     public Context getActivity() {
         return this;
@@ -59,10 +59,10 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        accountService = new AccountService(this);
-        accountService.getAccount();
+        accountHelper = new AccountHelper(this);
+        accountHelper.getAccount();
 
-        boardService = new BoardService(this);
+        boardHelper = new BoardHelper(this);
 
         drawerImageLoader();
     }
@@ -70,8 +70,8 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        accountService.dispose();
-        boardService.dispose();
+        accountHelper.dispose();
+        boardHelper.dispose();
     }
 
     @Override
@@ -89,7 +89,7 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
             case REQUEST_CODE_USER_SETTINGS:
                 if(resultCode == RESULT_OK){
                     // TODO костиль
-                    accountService.getAccount();
+                    accountHelper.getAccount();
                 }
                 break;
         }
@@ -98,7 +98,7 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
 
     @Override
     public void onCreateBoard(BoardDTO boardDTO) {
-        boardService.createBoard(boardDTO);
+        boardHelper.createBoard(boardDTO);
     }
 
     private void dialogSignOut(){
@@ -158,7 +158,7 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
 
         //create the drawer and remember the `Drawer` result object
         return new DrawerBuilder()
-                .withAccountHeader(getAccount(userDTO))
+                .withAccountHeader(buildAccount(userDTO))
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .addDrawerItems(
@@ -190,22 +190,16 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
                 .build();
     }
 
-    private AccountHeader getAccount(UserDTO userDTO){
+    private AccountHeader buildAccount(UserDTO userDTO){
         // Create the AccountHeader
-        String name = "";
-        String email = "";
-        String icon = "";
-
-        if(userDTO != null) {
-            name = userDTO.getFirstName() + " " + userDTO.getLastName();
-            email = userDTO.getEmail();
-            icon = userDTO.getImageUrl();
+        if(userDTO == null) {
+            return null;
         }
 
         ProfileDrawerItem profileDrawerItem = new ProfileDrawerItem()
-                .withName(name)
-                .withEmail(email)
-                .withIcon(icon);
+                .withName(userDTO.getFirstName() + " " + userDTO.getLastName())
+                .withEmail(userDTO.getEmail())
+                .withIcon(userDTO.getImageUrl());
 
         return new AccountHeaderBuilder()
                 .withActivity(this)

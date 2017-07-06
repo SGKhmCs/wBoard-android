@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ua.tsisar.wboard.activity.base.RegistrationActivityBase;
-import ua.tsisar.wboard.rest.helper.AccountService;
+import ua.tsisar.wboard.rest.helper.AccountHelper;
 import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.R;
 
@@ -22,14 +22,14 @@ public class RegistrationActivity extends RegistrationActivityBase {
     private EditText password;
     private EditText passwordConfirmation;
 
-    private AccountService accountService;
+    private AccountHelper accountHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        accountService = new AccountService(this);
+        accountHelper = new AccountHelper(this);
 
         username = (EditText) findViewById(R.id.userName_editText);
         email = (EditText) findViewById(R.id.email_editText);
@@ -40,7 +40,7 @@ public class RegistrationActivity extends RegistrationActivityBase {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        accountService.dispose();
+        accountHelper.dispose();
     }
 
     public void register(View view) {
@@ -76,7 +76,7 @@ public class RegistrationActivity extends RegistrationActivityBase {
             return;
         }
 
-        accountService.registerAccount(userDTO);
+        accountHelper.registerAccount(userDTO);
     }
 
     private static boolean isValidPassword(String password) {

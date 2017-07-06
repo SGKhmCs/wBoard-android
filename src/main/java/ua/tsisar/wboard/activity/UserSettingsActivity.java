@@ -9,7 +9,7 @@ import android.widget.EditText;
 import com.github.mrengineer13.snackbar.SnackBar;
 
 import ua.tsisar.wboard.activity.base.UserSettingsActivityBase;
-import ua.tsisar.wboard.rest.helper.AccountService;
+import ua.tsisar.wboard.rest.helper.AccountHelper;
 import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.dialog.PasswordDialog;
 import ua.tsisar.wboard.dialog.PasswordDialog.PasswordListener;
@@ -22,7 +22,7 @@ public class UserSettingsActivity extends UserSettingsActivityBase implements Pa
     private EditText lastName;
     private EditText email;
 
-    private AccountService accountService;
+    private AccountHelper accountHelper;
 
     public Context getActivity() {
         return this;
@@ -37,20 +37,20 @@ public class UserSettingsActivity extends UserSettingsActivityBase implements Pa
         lastName = (EditText) findViewById(R.id.lastName_editText);
         email = (EditText) findViewById(R.id.email_editText);
 
-        accountService = new AccountService(this);
-        accountService.getAccount();
+        accountHelper = new AccountHelper(this);
+        accountHelper.getAccount();
 
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        accountService.dispose();
+        accountHelper.dispose();
     }
 
     @Override
     public void onPasswordChanged(String password) {
-        accountService.changePassword(password);
+        accountHelper.changePassword(password);
     }
 
     public void saveAccount(View view){
@@ -67,7 +67,7 @@ public class UserSettingsActivity extends UserSettingsActivityBase implements Pa
             return;
         }
 
-        accountService.saveAccount(userDTO);
+        accountHelper.saveAccount(userDTO);
     }
 
     private static boolean isValidEmail(String email) {

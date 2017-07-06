@@ -3,7 +3,6 @@ package ua.tsisar.wboard.dto;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class UserDTO {
 
@@ -206,7 +205,22 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "{\n" +
+                "  \"activated\": "+activated+",\n" +
+                "  \"authorities\": "+authorities+",\n" +
+                "  \"createdBy\": \""+createdBy+"\",\n" +
+                "  \"createdDate\": \""+createdDate+"\",\n" +
+                "  \"email\": \""+email+"\",\n" +
+                "  \"firstName\": \""+firstName+"\",\n" +
+                "  \"id\": "+id+",\n" +
+                "  \"imageUrl\": \""+imageUrl+"\",\n" +
+                "  \"langKey\": \""+langKey+"\",\n" +
+                "  \"lastModifiedBy\": \""+lastModifiedBy+"\",\n" +
+                "  \"lastModifiedDate\": \""+lastModifiedDate+"\",\n" +
+                "  \"lastName\": \""+lastName+"\",\n" +
+                "  \"login\": \""+login+"\",\n" +
+                "  \"password\": \""+password+"\"\n" +
+                "}";
     }
 
 }

@@ -7,12 +7,12 @@ import ua.tsisar.wboard.App;
 import ua.tsisar.wboard.dto.UserDTO;
 import ua.tsisar.wboard.rest.helper.listener.AccountListener;
 
-public class AccountService {
+public class AccountHelper {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private AccountListener listener;
 
-    public AccountService(AccountListener listener){
+    public AccountHelper(AccountListener listener){
         this.listener = listener;
     }
 

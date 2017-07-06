@@ -10,9 +10,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import ua.tsisar.wboard.activity.base.LoginActivityBase;
-import ua.tsisar.wboard.rest.helper.AccountService;
+import ua.tsisar.wboard.rest.helper.AccountHelper;
 import ua.tsisar.wboard.App;
-import ua.tsisar.wboard.rest.helper.AuthenticateService;
+import ua.tsisar.wboard.rest.helper.AuthenticateHelper;
 import ua.tsisar.wboard.dto.AuthorizeDTO;
 import ua.tsisar.wboard.dto.TokenDTO;
 import ua.tsisar.wboard.R;
@@ -29,8 +29,8 @@ public class LoginActivity extends LoginActivityBase {
     private EditText password;
     private CheckBox rememberMe;
 
-    private AuthenticateService authenticateService;
-    private AccountService accountService;
+    private AuthenticateHelper authenticateHelper;
+    private AccountHelper accountHelper;
 
     public Context getActivity() {
         return this;
@@ -47,16 +47,16 @@ public class LoginActivity extends LoginActivityBase {
         password = (EditText) findViewById(R.id.password_editText);
         rememberMe = (CheckBox) findViewById(R.id.rememberMe_checkBox);
 
-        authenticateService = new AuthenticateService(this);
-        accountService = new AccountService(this);
-        accountService.isAuthenticated();
+        authenticateHelper = new AuthenticateHelper(this);
+        accountHelper = new AccountHelper(this);
+        accountHelper.isAuthenticated();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        authenticateService.dispose();
-        accountService.dispose();
+        authenticateHelper.dispose();
+        accountHelper.dispose();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class LoginActivity extends LoginActivityBase {
         } else {
             saveIdToken("");
         }
-        accountService.isAuthenticated();
+        accountHelper.isAuthenticated();
     }
 
     @Override
@@ -101,7 +101,7 @@ public class LoginActivity extends LoginActivityBase {
                 password.getText().toString(),
                 rememberMe.isChecked());
 
-        authenticateService.authorize(authorizeDTO);
+        authenticateHelper.authorize(authorizeDTO);
     }
 
     public void singOut(){

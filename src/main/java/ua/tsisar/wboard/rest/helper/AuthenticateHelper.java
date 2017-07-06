@@ -9,12 +9,12 @@ import ua.tsisar.wboard.App;
 import ua.tsisar.wboard.dto.AuthorizeDTO;
 import ua.tsisar.wboard.rest.helper.listener.AuthenticateListener;
 
-public class AuthenticateService {
+public class AuthenticateHelper {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private AuthenticateListener listener;
 
-    public AuthenticateService(AuthenticateListener listener){
+    public AuthenticateHelper(AuthenticateListener listener){
         this.listener = listener;
     }
 

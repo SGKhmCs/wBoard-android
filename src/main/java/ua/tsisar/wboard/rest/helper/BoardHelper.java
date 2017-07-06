@@ -7,7 +7,7 @@ import ua.tsisar.wboard.App;
 import ua.tsisar.wboard.dto.BoardDTO;
 import ua.tsisar.wboard.rest.helper.listener.BoardListener;
 
-public class BoardService {
+public class BoardHelper {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private BoardListener listener;
@@ -16,7 +16,7 @@ public class BoardService {
         return App.getTokenDTO().getIdTokenEx();
     }
 
-    public BoardService(BoardListener listener){
+    public BoardHelper(BoardListener listener){
         this.listener = listener;
     }
 
