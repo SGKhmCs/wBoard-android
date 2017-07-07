@@ -1,5 +1,7 @@
 package ua.tsisar.wboard.dto;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -52,7 +54,7 @@ public class BoardDTO {
     }
 
     public Boolean getPub() {
-        return pub;
+        return pub==null?false:pub;
     }
 
     public void setPub(Boolean pub) {

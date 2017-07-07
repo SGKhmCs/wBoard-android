@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.lucasurbas.listitemview.ListItemView;
 
@@ -40,12 +39,16 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.boardViewHol
 
         //TODO add owner, date etc
         holder.listItemView.setTitle(list.get(position).getName());
-        holder.listItemView.setSubtitle(list.get(position).getPub()?"Board is public. ":"" + "Your role admin.");
+        holder.listItemView.setSubtitle((list.get(position).getPub()?"Board is public. ":"") + "Your role admin.");
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        if(list == null) {
+            return 0;
+        }else{
+            return list.size();
+        }
     }
 
     public class boardViewHolder extends RecyclerView.ViewHolder {

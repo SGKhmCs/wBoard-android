@@ -37,7 +37,8 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
 
     private static final int PAGE = 0;
     private static final int SIZE = 99;
-    private static final String SORT = "id";
+    // не сортує по імені
+    private static final String SORT = "id,asc";
 
     private AlphaAnimation buttonClick;
 
@@ -98,6 +99,7 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.d(TAG, "onQueryTextChange: " + newText);
+                boardHelper.searchBoards(PAGE, SIZE, "*"+newText+"*", SORT);
                 return false;
             }
         });
@@ -129,5 +131,6 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
                 .withMessage("Your board created.")
                 .withStyle(SnackBar.Style.INFO)
                 .show();
+        boardHelper.getAllBoards(PAGE, SIZE, SORT);
     }
 }
