@@ -39,7 +39,7 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
     private static final int PAGE = 0;
     private static final int SIZE = 99;
     // не сортує по імені
-    private static final String SORT = "name,asc";
+    private static final String SORT = null;
 
     private AlphaAnimation clickAnimation;
 
