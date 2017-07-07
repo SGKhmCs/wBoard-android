@@ -39,9 +39,9 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
     private static final int PAGE = 0;
     private static final int SIZE = 99;
     // не сортує по імені
-    private static final String SORT = "id,asc";
+    private static final String SORT = "name,asc";
 
-    private AlphaAnimation buttonClick;
+    private AlphaAnimation clickAnimation;
 
     private BoardAdapter boardAdapter;
     private RecyclerView recyclerView;
@@ -54,13 +54,13 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        buttonClick = new AlphaAnimation(1F, 0.8F);
+        clickAnimation = new AlphaAnimation(1F, 0.2F);
 
         addBoardFAB = (FloatingActionButton) findViewById(R.id.add_board_fab);
         addBoardFAB.setOnClickListener((View v) -> {
             CreateBoardDialog createBoardDialog = new CreateBoardDialog();
             createBoardDialog.show(getSupportFragmentManager(), "boardNameDialog");
-            addBoardFAB.startAnimation(buttonClick);
+            addBoardFAB.startAnimation(clickAnimation);
         });
 
         boardHelper = new BoardHelper(this);
@@ -73,6 +73,7 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
                 new RecyclerItemClickListener(this, (View view, int position) -> {
                     Log.d(TAG, "RecyclerItemClickListener, position: " + position);
                     Log.d(TAG, "RecyclerItemClickListener, view: " + view.toString());
+                    view.startAnimation(clickAnimation);
                 })
         );
     }

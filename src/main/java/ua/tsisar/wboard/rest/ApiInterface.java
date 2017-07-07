@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.reactivex.Single;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -13,12 +14,13 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import ua.tsisar.wboard.dto.AuthorizeDTO;
 import ua.tsisar.wboard.dto.BoardDTO;
+import ua.tsisar.wboard.dto.OwnerToolsDTO;
 import ua.tsisar.wboard.dto.TokenDTO;
 import ua.tsisar.wboard.dto.UserDTO;
 
 
 public interface ApiInterface {
-    String URL_BASE = "http://192.168.20.105:8080/api/";
+    String URL_BASE = "http://192.168.43.123:8080/api/";
 
     //User JWT Controller
     @Headers("Content-Type: application/json")
@@ -50,19 +52,19 @@ public interface ApiInterface {
 
     //Board Resource
     @Headers("Content-Type: application/json")
-    @GET("boards")
-    Single<List<BoardDTO>>getAllBoards(@Header("Authorization") String authorization,
-                                     @Query("page") Integer page,
-                                     @Query("size") Integer size,
-                                     @Query("sort") String... sort);
-
-    @Headers("Content-Type: application/json")
     @GET("_search/boards")
     Single<List<BoardDTO>>searchBoards(@Header("Authorization") String authorization,
                                      @Query("page") Integer page,
                                      @Query("size") Integer size,
                                      @Query("query") String query,
                                      @Query("sort") String... sort);
+
+    @Headers("Content-Type: application/json")
+    @GET("boards")
+    Single<List<BoardDTO>>getAllBoards(@Header("Authorization") String authorization,
+                                       @Query("page") Integer page,
+                                       @Query("size") Integer size,
+                                       @Query("sort") String... sort);
 
     @Headers("Content-Type: application/json")
     @POST("boards")
@@ -78,4 +80,34 @@ public interface ApiInterface {
     @GET("boards/{id}")
     Single<BoardDTO>getBoard(@Header("Authorization") String authorization,
                            @Path("id") long id);
+
+
+    //Owner-tools Resource
+    @Headers("Content-Type: application/json")
+    @GET("_search/owner-tools")
+    Single<List<OwnerToolsDTO>>searchOwnerTools(@Header("Authorization") String authorization,
+                                                @Query("page") Integer page,
+                                                @Query("size") Integer size,
+                                                @Query("query") String query,
+                                                @Query("sort") String... sort);
+
+    @Headers("Content-Type: application/json")
+    @GET("owner-tools")
+    Single<List<OwnerToolsDTO>>getAllOwnerTools(@Header("Authorization") String authorization,
+                                                @Query("page") Integer page,
+                                                @Query("size") Integer size,
+                                                @Query("sort") String... sort);
+
+    @Headers("Content-Type: application/json")
+    @DELETE("owner-tools/{id}")
+    void deleteOwnerTools(@Header("Authorization") String authorization,
+                                       @Path("id") long id);
+
+
+    @Headers("Content-Type: application/json")
+    @GET("owner-tools/{id}")
+    Single<OwnerToolsDTO>getOwnerTools(@Header("Authorization") String authorization,
+                                       @Path("id") long id);
+
+
 }
