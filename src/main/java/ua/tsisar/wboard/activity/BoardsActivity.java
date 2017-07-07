@@ -19,7 +19,8 @@ import com.github.mrengineer13.snackbar.SnackBar;
 
 import java.util.List;
 
-import ua.tsisar.wboard.BoardAdapter;
+import ua.tsisar.wboard.adapter.BoardAdapter;
+import ua.tsisar.wboard.recycler.RecyclerItemClickListener;
 import ua.tsisar.wboard.activity.base.BoardActivityBase;
 import ua.tsisar.wboard.dialog.CreateBoardDialog;
 import ua.tsisar.wboard.dialog.CreateBoardDialog.CreateBoardDialogListener;
@@ -68,6 +69,12 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
         recyclerView = (RecyclerView) findViewById(R.id.board_recyclerView);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, (View view, int position) -> {
+                    Log.d(TAG, "RecyclerItemClickListener, position: " + position);
+                    Log.d(TAG, "RecyclerItemClickListener, view: " + view.toString());
+                })
+        );
     }
 
     @Override
