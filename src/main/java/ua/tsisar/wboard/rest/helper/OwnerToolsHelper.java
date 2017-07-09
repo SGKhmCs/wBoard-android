@@ -1,5 +1,7 @@
 package ua.tsisar.wboard.rest.helper;
 
+import android.util.Log;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -19,6 +21,14 @@ public class OwnerToolsHelper {
         this.listener = listener;
     }
 
+    public void getAllOwnerToolsByBoardId(int page, int size, Long boardId, String... sort){
+        compositeDisposable.add(App.getApi().getAllOwnerToolsByBoardId(getIdToken(), page, size, boardId, sort)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(list -> listener.onGetAllOwnerToolsByBoardIdSuccess(list),
+                      throwable -> listener.onFailure(throwable)));
+    }
+
     public void searchOwnerTools(int page, int size, String query, String... sort){
         compositeDisposable.add(App.getApi().searchOwnerTools(getIdToken(), page, size, query, sort)
                 .subscribeOn(Schedulers.io())
@@ -35,6 +45,7 @@ public class OwnerToolsHelper {
                       throwable -> listener.onFailure(throwable)));
     }
 
+    //TODO fix return
     public void deleteOwnerTools(final long id){
         compositeDisposable.add(App.getApi().deleteOwnerTools(getIdToken(), id)
                 .subscribeOn(Schedulers.io())
