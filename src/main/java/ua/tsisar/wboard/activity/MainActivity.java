@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -28,6 +29,7 @@ import com.squareup.picasso.Picasso;
 
 import ua.tsisar.wboard.activity.base.MainActivityBase;
 import ua.tsisar.wboard.dialog.CreateBoardDialog;
+import ua.tsisar.wboard.dto.RoleToolsDTO;
 import ua.tsisar.wboard.rest.helper.AccountHelper;
 import ua.tsisar.wboard.rest.helper.BoardHelper;
 import ua.tsisar.wboard.dto.BoardDTO;
@@ -40,6 +42,7 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
 
     private static final int REQUEST_CODE_USER_SETTINGS = 3;
     private static final int RESULT_SIGN_OUT = -2;
+    private static final String TAG = "myLogs";
 
     private Toolbar toolbar;
     private Drawer drawer;

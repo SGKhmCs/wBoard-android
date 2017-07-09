@@ -16,7 +16,7 @@ public class WriterToolsHelper {
         return App.getTokenDTO().getIdTokenEx();
     }
 
-    WriterToolsHelper(WriterToolsListener listener){
+    public WriterToolsHelper(WriterToolsListener listener){
         this.listener = listener;
     }
 

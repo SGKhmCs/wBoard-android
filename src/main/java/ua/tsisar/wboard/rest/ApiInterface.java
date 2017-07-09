@@ -250,10 +250,8 @@ public interface ApiInterface {
     Single<String> deleteReaderTools(@Header("Authorization") String authorization,
                                      @Path("id") long id);
 
-
     @Headers("Content-Type: application/json")
     @GET("reader-tools/{id}")
     Single<ReaderToolsDTO> getReaderTools(@Header("Authorization") String authorization,
                                           @Path("id") long id);
-
 }

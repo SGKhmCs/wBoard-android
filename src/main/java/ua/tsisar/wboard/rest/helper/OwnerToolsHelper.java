@@ -1,7 +1,5 @@
 package ua.tsisar.wboard.rest.helper;
 
-import android.util.Log;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -17,7 +15,7 @@ public class OwnerToolsHelper {
         return App.getTokenDTO().getIdTokenEx();
     }
 
-    OwnerToolsHelper(OwnerToolsListener listener){
+    public OwnerToolsHelper(OwnerToolsListener listener){
         this.listener = listener;
     }
 

@@ -1,10 +1,11 @@
-package ua.tsisar.wboard.rest.helper.listener;
+package ua.tsisar.wboard.rest.helper;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import ua.tsisar.wboard.App;
 import ua.tsisar.wboard.dto.ReaderToolsDTO;
+import ua.tsisar.wboard.rest.helper.listener.ReaderToolsListener;
 
 public class ReaderToolsHelper {
 
@@ -15,7 +16,7 @@ public class ReaderToolsHelper {
         return App.getTokenDTO().getIdTokenEx();
     }
 
-    ReaderToolsHelper(ReaderToolsListener listener){
+    public ReaderToolsHelper(ReaderToolsListener listener){
         this.listener = listener;
     }
 

@@ -5,9 +5,9 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import ua.tsisar.wboard.App;
 import ua.tsisar.wboard.dto.AdminToolsDTO;
-import ua.tsisar.wboard.dto.BoardDTO;
 import ua.tsisar.wboard.rest.helper.listener.AdminToolsListener;
 
+//TODO We can use generic?
 public class AdminToolsHelper {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -17,7 +17,7 @@ public class AdminToolsHelper {
         return App.getTokenDTO().getIdTokenEx();
     }
 
-    AdminToolsHelper(AdminToolsListener listener){
+    public AdminToolsHelper(AdminToolsListener listener){
         this.listener = listener;
     }
 
