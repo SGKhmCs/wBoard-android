@@ -1,5 +1,7 @@
 package ua.tsisar.wboard.dto;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -41,9 +43,9 @@ public class TokenDTO {
 
     @Override
     public String toString() {
-        return "{\n" +
-                "  \"id_token\": \""+idToken+"\"\n" +
-                "}";
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        return gson.toJson(this);
     }
 
 }

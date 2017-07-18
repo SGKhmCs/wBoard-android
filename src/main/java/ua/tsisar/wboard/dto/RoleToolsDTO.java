@@ -1,5 +1,7 @@
 package ua.tsisar.wboard.dto;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -90,12 +92,8 @@ public class RoleToolsDTO {
 
     @Override
     public String toString() {
-        return "{\n" +
-                "  \"boardId\": "+boardId+",\n" +
-                "  \"boardName\": \""+boardName+"\",\n" +
-                "  \"id\": "+id+",\n" +
-                "  \"userId\": "+userId+",\n" +
-                "  \"userLogin\": \""+userLogin+"\"\n" +
-                "}";
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        return gson.toJson(this);
     }
 }

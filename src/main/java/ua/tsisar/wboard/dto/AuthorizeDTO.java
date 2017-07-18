@@ -1,5 +1,7 @@
 package ua.tsisar.wboard.dto;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -62,11 +64,9 @@ public class AuthorizeDTO {
 
     @Override
     public String toString() {
-        return "{\n" +
-                "  \"password\": \""+password+"\",\n" +
-                "  \"rememberMe\": "+rememberMe+",\n" +
-                "  \"username\": \""+username+"\"\n" +
-                "}";
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        return gson.toJson(this);
     }
 
 }

@@ -2,6 +2,7 @@ package ua.tsisar.wboard.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -37,9 +38,9 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
     private BoardHelper boardHelper;
 
     private static final int PAGE = 0;
-    private static final int SIZE = 99;
+    private static final int SIZE = 0;
     // не сортує по імені
-    private static final String SORT = null;
+    private static final String SORT = "id";
 
     private AlphaAnimation clickAnimation;
 
@@ -72,8 +73,12 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, (View view, int position) -> {
                     Log.d(TAG, "RecyclerItemClickListener, position: " + position);
-                    Log.d(TAG, "RecyclerItemClickListener, view: " + view.toString());
+                    Log.d(TAG, "RecyclerItemClickListener, boardDTO: " + boardAdapter.getBoardDTO(position));
                     view.startAnimation(clickAnimation);
+                    Intent intent = new Intent();
+                    intent.putExtra("boardId", boardAdapter.getBoardDTO(position).getId());
+                    setResult(RESULT_OK, intent);
+                    finish();
                 })
         );
     }
@@ -100,7 +105,7 @@ public class BoardsActivity extends BoardActivityBase implements CreateBoardDial
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: " + query);
-                boardHelper.searchBoards(PAGE, SIZE, query, SORT);
+                boardHelper.searchBoards(PAGE, SIZE, "*"+query+"*", SORT);
                 return false;
             }
 

@@ -24,6 +24,11 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.boardViewHol
         inflater = LayoutInflater.from(context);
         this.list = list;
     }
+
+    public BoardDTO getBoardDTO(int position){
+        return list.get(position);
+    }
+    
     @Override
     public boardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -38,9 +43,12 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.boardViewHol
         if(list == null)
             return;
 
+        BoardDTO boardDTO = list.get(position);
+
         //TODO add owner, date etc
-        holder.listItemView.setTitle(list.get(position).getName());
-        holder.listItemView.setSubtitle((list.get(position).getPub()?"Board is public. ":"") + "Your role admin.");
+        holder.listItemView.setTitle(boardDTO.getName());
+        holder.listItemView.setSubtitle((boardDTO.getPub()?"Board is public. ":"")
+                + "Created by " + boardDTO.getCreatedBy() + ".");
     }
 
     @Override

@@ -41,6 +41,7 @@ import ua.tsisar.wboard.dialog.CreateBoardDialog.CreateBoardDialogListener;
 public class MainActivity extends MainActivityBase implements CreateBoardDialogListener {
 
     private static final int REQUEST_CODE_USER_SETTINGS = 3;
+    private static final int REQUEST_CODE_BOARDS = 4;
     private static final int RESULT_SIGN_OUT = -2;
     private static final String TAG = "myLogs";
 
@@ -93,6 +94,11 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
                 if(resultCode == RESULT_OK){
                     // TODO костиль
                     accountHelper.getAccount();
+                }
+                break;
+            case REQUEST_CODE_BOARDS:
+                if(resultCode == RESULT_OK){
+                    Log.d(TAG, "onActivityResult board id: " + data.getIntExtra("boardId", 0));
                 }
                 break;
         }
@@ -172,16 +178,16 @@ public class MainActivity extends MainActivityBase implements CreateBoardDialogL
                         itemSignOut
                 )
                 .withOnDrawerItemClickListener((View view, int position, IDrawerItem drawerItem) -> {
-                        // do something with the clicked item :D
+                    drawer.closeDrawer();
+                    // do something with the clicked item :D
                         switch (position) {
                             case 1:
-                                drawer.closeDrawer();
                                 CreateBoardDialog createBoardDialog = new CreateBoardDialog();
                                 createBoardDialog.show(getSupportFragmentManager(), "boardNameDialog");
                                 break;
                             case 2:
                                 Intent intent = new Intent(getActivity(), BoardsActivity.class);
-                                startActivity(intent);
+                                startActivityForResult(intent, REQUEST_CODE_BOARDS);
                                 break;
                             case 5:
                                 setResult(RESULT_SIGN_OUT);

@@ -1,6 +1,9 @@
 package ua.tsisar.wboard.dto;
 
 import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -205,22 +208,9 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "{\n" +
-                "  \"activated\": "+activated+",\n" +
-                "  \"authorities\": "+authorities+",\n" +
-                "  \"createdBy\": \""+createdBy+"\",\n" +
-                "  \"createdDate\": \""+createdDate+"\",\n" +
-                "  \"email\": \""+email+"\",\n" +
-                "  \"firstName\": \""+firstName+"\",\n" +
-                "  \"id\": "+id+",\n" +
-                "  \"imageUrl\": \""+imageUrl+"\",\n" +
-                "  \"langKey\": \""+langKey+"\",\n" +
-                "  \"lastModifiedBy\": \""+lastModifiedBy+"\",\n" +
-                "  \"lastModifiedDate\": \""+lastModifiedDate+"\",\n" +
-                "  \"lastName\": \""+lastName+"\",\n" +
-                "  \"login\": \""+login+"\",\n" +
-                "  \"password\": \""+password+"\"\n" +
-                "}";
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        return gson.toJson(this);
     }
 
 }

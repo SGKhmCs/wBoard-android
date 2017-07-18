@@ -1,6 +1,7 @@
 package ua.tsisar.wboard.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -105,6 +106,8 @@ public class UserSettingsActivity extends UserSettingsActivityBase implements Pa
 
                     @Override
                     public void onHide(int stackSize) {
+                        Intent intent = new Intent();
+                        setResult(RESULT_OK, intent);
                         finish();
                     }
                 })

@@ -1,7 +1,7 @@
 package ua.tsisar.wboard.dto;
 
-import android.support.annotation.NonNull;
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,6 +16,12 @@ public class BoardDTO {
     @SerializedName("pub")
     @Expose
     private Boolean pub;
+    @SerializedName("createdDate")
+    @Expose
+    private Object createdDate;
+    @SerializedName("createdBy")
+    @Expose
+    private String createdBy;
 
     /**
      * No args constructor for use in serialization
@@ -27,12 +33,22 @@ public class BoardDTO {
     /**
      *
      * @param id
+     * @param createdBy
      * @param name
+     * @param createdDate
      * @param pub
      */
-    public BoardDTO(Integer id, String name, Boolean pub) {
+    public BoardDTO(Integer id, String name, Boolean pub, Object createdDate, String createdBy) {
         super();
         this.id = id;
+        this.name = name;
+        this.pub = pub;
+        this.createdDate = createdDate;
+        this.createdBy = createdBy;
+    }
+
+    public BoardDTO(String name, Boolean pub) {
+        super();
         this.name = name;
         this.pub = pub;
     }
@@ -54,20 +70,32 @@ public class BoardDTO {
     }
 
     public Boolean getPub() {
-        return pub==null?false:pub;
+        return pub;
     }
 
     public void setPub(Boolean pub) {
         this.pub = pub;
     }
 
-    @Override
-    public String toString() {
-        return "{\n" +
-                "  \"id\": " + id +",\n" +
-                "  \"name\": \"" + name + "\",\n" +
-                "  \"pub\": " + pub + "\n" +
-                "}";
+    public Object getCreatedDate() {
+        return createdDate;
     }
 
+    public void setCreatedDate(Object createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+    @Override
+    public String toString(){
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        return gson.toJson(this);
+    }
 }

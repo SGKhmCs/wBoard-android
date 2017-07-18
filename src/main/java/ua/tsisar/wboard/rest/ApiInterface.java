@@ -23,7 +23,7 @@ import ua.tsisar.wboard.dto.WriterToolsDTO;
 
 
 public interface ApiInterface {
-    String URL_BASE = "http://192.168.20.105:8080/api/";
+    String URL_BASE = "http://192.168.38.105:8080/api/";
 
     //User JWT Controller
     @Headers("Content-Type: application/json")
@@ -57,68 +57,68 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @GET("_search/boards")
     Single<List<BoardDTO>> searchBoards(@Header("Authorization") String authorization,
-                                     @Query("page") Integer page,
-                                     @Query("size") Integer size,
-                                     @Query("query") String query,
-                                     @Query("sort") String... sort);
+                                        @Query("page") Integer page,
+                                        @Query("size") Integer size,
+                                        @Query("query") String query,
+                                        @Query("sort") String... sort);
 
     @Headers("Content-Type: application/json")
     @GET("boards")
     Single<List<BoardDTO>> getAllBoards(@Header("Authorization") String authorization,
-                                       @Query("page") Integer page,
-                                       @Query("size") Integer size,
-                                       @Query("sort") String... sort);
+                                        @Query("page") Integer page,
+                                        @Query("size") Integer size,
+                                        @Query("sort") String... sort);
 
     @Headers("Content-Type: application/json")
     @POST("boards")
     Single<BoardDTO> createBoard(@Header("Authorization") String authorization,
-                               @Body BoardDTO boardDTO);
+                                 @Body BoardDTO boardDTO);
 
     @Headers("Content-Type: application/json")
     @PUT("boards")
     Single<BoardDTO> updateBoard(@Header("Authorization") String authorization,
-                               @Body BoardDTO boardDTO);
+                                 @Body BoardDTO boardDTO);
 
     @Headers("Content-Type: application/json")
     @GET("boards/{id}")
     Single<BoardDTO> getBoard(@Header("Authorization") String authorization,
-                           @Path("id") long id);
+                              @Path("id") long id);
 
 
     //Owner-tools Resource
     @Headers("Content-Type: application/json")
     @GET("_by-board/owner-tools")
     Single<List<OwnerToolsDTO>> getAllOwnerToolsByBoardId(@Header("Authorization") String authorization,
-                                                         @Query("page") Integer page,
-                                                         @Query("size") Integer size,
-                                                         @Query("boardId") Long boardId,
-                                                         @Query("sort") String... sort);
+                                                          @Query("page") Integer page,
+                                                          @Query("size") Integer size,
+                                                          @Query("boardId") Long boardId,
+                                                          @Query("sort") String... sort);
 
     @Headers("Content-Type: application/json")
     @GET("_search/owner-tools")
     Single<List<OwnerToolsDTO>> searchOwnerTools(@Header("Authorization") String authorization,
-                                                @Query("page") Integer page,
-                                                @Query("size") Integer size,
-                                                @Query("query") String query,
-                                                @Query("sort") String... sort);
+                                                 @Query("page") Integer page,
+                                                 @Query("size") Integer size,
+                                                 @Query("query") String query,
+                                                 @Query("sort") String... sort);
 
     @Headers("Content-Type: application/json")
     @GET("owner-tools")
     Single<List<OwnerToolsDTO>> getAllOwnerTools(@Header("Authorization") String authorization,
-                                                @Query("page") Integer page,
-                                                @Query("size") Integer size,
-                                                @Query("sort") String... sort);
+                                                 @Query("page") Integer page,
+                                                 @Query("size") Integer size,
+                                                 @Query("sort") String... sort);
 
     @Headers("Content-Type: application/json")
     @DELETE("owner-tools/{id}")
     Single<String> deleteOwnerTools(@Header("Authorization") String authorization,
-                                       @Path("id") long id);
+                                    @Path("id") long id);
 
 
     @Headers("Content-Type: application/json")
     @GET("owner-tools/{id}")
     Single<OwnerToolsDTO> getOwnerTools(@Header("Authorization") String authorization,
-                                       @Path("id") long id);
+                                        @Path("id") long id);
 
 
     //Admin-tools Resource
@@ -148,7 +148,7 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("admin-tools")
     Single<AdminToolsDTO> createAdminTools(@Header("Authorization") String authorization,
-                                 @Body AdminToolsDTO adminToolsDTO);
+                                           @Body AdminToolsDTO adminToolsDTO);
 
     @Headers("Content-Type: application/json")
     @PUT("admin-tools")

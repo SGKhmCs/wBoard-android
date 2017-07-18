@@ -50,7 +50,7 @@ public class AdminToolsHelper {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(b -> listener.onCreateAdminToolsSuccess(b),
-                        throwable -> listener.onFailure(throwable)));
+                   throwable -> listener.onFailure(throwable)));
     }
 
     public void updateAdminTools(final AdminToolsDTO adminToolsDTO){
@@ -58,7 +58,7 @@ public class AdminToolsHelper {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(b -> listener.onUpdateAdminToolsSuccess(b),
-                        throwable -> listener.onFailure(throwable)));
+                   throwable -> listener.onFailure(throwable)));
     }
 
     //TODO fix return

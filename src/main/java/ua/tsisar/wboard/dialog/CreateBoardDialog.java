@@ -46,7 +46,7 @@ public class CreateBoardDialog extends DialogFragment{
                 .setPositiveButton("Continue", (DialogInterface dialog, int which) -> {
                     if (listener != null) {
                         listener.onCreateBoard(
-                                new BoardDTO(null, nameEditText.getText().toString(),
+                                new BoardDTO(nameEditText.getText().toString(),
                                         isPublic.isChecked()));
                     }
                 });

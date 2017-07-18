@@ -8,5 +8,11 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="ua.tsisar.wboard.activity.MainActivity"
     tools:showIn="@layout/activity_main">
-
+    <fragment
+        android:id="@+id/fragment_dash_board"
+        android:name="ua.tsisar.wboard.fragment.DashBoardFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_dash_board">
+    </fragment>
 </RelativeLayout>
